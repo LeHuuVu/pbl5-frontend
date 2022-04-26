@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import Login from '../pages/login';
-import { BrowserRouter as Router, Route } from "react-router-dom"
+import 'antd/dist/antd.min.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
 class App extends Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Route exact path='/'><Login/></Route>
-        </div>
+    <Router>
+        <Routes>
+          <Route path="/" element={<Login/>}/>
+        </Routes>
       </Router>
     );
   }

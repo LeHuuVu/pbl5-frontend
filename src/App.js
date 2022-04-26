@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
-import Routes from './route/route';
+// import logo from './logo.svg';
+// import './App.css';
+import Routers from './route/route';
 
-class App extends Component {
-
-  render() {
-    return (
-     <Routes />
-    );
-  }
+function App() {
+  return (
+      <Routers/>
+  );
 }
 
 export default App;
