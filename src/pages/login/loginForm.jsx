@@ -1,17 +1,40 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-// import ReactDOM from "react-dom";
 
-import React from 'react';
+import React, { useState } from 'react'
 import 'antd/dist/antd.min.css';
 import "./style.css";
-
-import { Form, Input, Button, Checkbox } from 'antd';
+import { login } from '../../api/login'
+import { Form, Input, Button, Checkbox, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 function LoginForm() {
+  const [Email, setEmail] = useState({ })
+  const [password, setPassword] = useState({ })
+  const onEmailChange = (e) => {
+    setEmail(e.target.value)
+  }  
+  const onPassChange = (e) => {
+    setPassword(e.target.value)
+  }
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    login({
+      email: Email,
+      password: password
+    }).then(() => openNotificationSuccess())
+      .catch((error) => {
+        notification.error({
+          message: 'Incorrect email or password',
+          duration: 3,
+        })
+      })
   };
+  const openNotificationSuccess = () => {
+    notification.success({
+      message: 'Welcome back!',
+      duration: 3,
+    })
+    console.log('success')
+  }
 
   return (
     <div>
@@ -24,15 +47,18 @@ function LoginForm() {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="Email"
           rules={[
             {
               required: true,
-              message: 'Please input your Username!',
+              message: 'Please input your Email!',
             },
           ]}
         >
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+          <Input 
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Email" 
+            onChange={onEmailChange} />
         </Form.Item>
         <Form.Item
           name="password"
@@ -47,6 +73,7 @@ function LoginForm() {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
+            onChange={onPassChange}
           />
         </Form.Item>
         <Form.Item>
@@ -70,4 +97,3 @@ function LoginForm() {
   )
 }
 export default LoginForm
-// ReactDOM.render(Login, document.getElementById('container'));

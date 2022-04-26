@@ -4,10 +4,9 @@ import "./style.css";
 import LoginForm from './loginForm';
 import 'antd/dist/antd.min.css';
 
-
 function Login() {
   return (
-    <div className="loginForm">
+    <div className="login-form">
       <LoginForm />
     </div>  
     )
