@@ -1,5 +1,5 @@
 .App {
-<<<<<<< Updated upstream
+/* <<<<<<< Updated upstream */
     text-align: center;
   }
   
@@ -37,8 +37,8 @@
       transform: rotate(360deg);
     }
   }
-=======
-  text-align: center;
+/* ======= */
+  /* text-align: center;
 }
 
 .App-logo {
@@ -77,6 +77,6 @@
 }
 .r_bt{
   /* align-items: center; */
-  text-align: center;
-}
->>>>>>> Stashed changes
+  /* text-align: center; */
+/* } */ 
+/* >>>>>>> Stashed changes */
