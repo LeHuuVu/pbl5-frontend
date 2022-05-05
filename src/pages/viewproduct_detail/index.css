@@ -1,0 +1,12 @@
+.center {
+    margin-left: 10%; 
+    /* margin-right: 15%; */
+    text-align: center;
+  }
+.des-item{
+    text-align: center;
+}
+/* td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  } */
