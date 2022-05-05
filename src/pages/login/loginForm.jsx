@@ -8,11 +8,11 @@ import { Form, Input, Button, Checkbox, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 function LoginForm() {
-  const [Email, setEmail] = useState({ })
-  const [password, setPassword] = useState({ })
+  const [Email, setEmail] = useState({})
+  const [password, setPassword] = useState({})
   const onEmailChange = (e) => {
     setEmail(e.target.value)
-  }  
+  }
   const onPassChange = (e) => {
     setPassword(e.target.value)
   }
@@ -37,15 +37,24 @@ function LoginForm() {
   }
 
   return (
-    <div>
+    <div className='home-login'>
+      <div className='header'>
+        <h1>Welcome!</h1>
+        <h2>Login Pages</h2>
+      </div>
+      <div className='login-boder'>
       <Form
+        // style={{
+        //   align:'center',
+        // }}
         name="normal_login"
-        className="login-form"
+        // className="login-form"
         initialValues={{
           remember: true,
         }}
         onFinish={onFinish}
       >
+        {/* <Form.Item {...formItemLayout}> */}
         <Form.Item
           name="Email"
           rules={[
@@ -55,9 +64,9 @@ function LoginForm() {
             },
           ]}
         >
-          <Input 
+          <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email" 
+            placeholder="Email"
             onChange={onEmailChange} />
         </Form.Item>
         <Form.Item
@@ -76,23 +85,27 @@ function LoginForm() {
             onChange={onPassChange}
           />
         </Form.Item>
+        {/* </Form.Item> */}
+
         <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox >Remember me</Checkbox><br />
           </Form.Item>
 
           <a className="login-form-forgot" href="">
-            Forgot password
+            Forgot password?
           </a>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item className='bt-login-register'>
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
-          </Button>
-          Or <a href="">register now!</a>
+          </Button><br/><br/>
+          <p>Or <a href="">Register now!</a></p>
         </Form.Item>
       </Form>
+      </div>
+      
     </div>
   )
 }

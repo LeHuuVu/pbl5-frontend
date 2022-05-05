@@ -6,7 +6,7 @@ import 'antd/dist/antd.min.css';
 
 function Login() {
   return (
-    <div className="login-form">
+    <div>
       <LoginForm />
     </div>  
     )
