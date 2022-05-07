@@ -1,0 +1,13 @@
+#space{
+    margin-left: 65%;
+    /* margin-bottom: 2%; */
+}
+.home{
+    margin: 1% 15%;
+}
+.search{
+    margin-left:400px;
+    display: inline-block;
+    /* style={{display:'inline-block'}} */
+    /* margin-top: 1px; */
+}
