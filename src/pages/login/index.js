@@ -5,10 +5,14 @@ import LoginForm from './loginForm';
 import 'antd/dist/antd.min.css';
 
 function Login() {
-  return (
-    <div className="login-form">
-      <LoginForm />
-    </div>  
-    )
+  
+  if(localStorage['role']!=null) {window.location.href = '/viewproduct_detail'}
+  else{
+    return (
+      <div>
+        <LoginForm />
+      </div>  
+      )
+  }
 }
 export default Login
