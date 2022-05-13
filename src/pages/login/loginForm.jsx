@@ -6,9 +6,11 @@ import "./style.css";
 import { login } from '../../api/login'
 import { Form, Input, Button, Checkbox, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  const [Email, setEmail] = useState({})
+  const navigate = useNavigate();
+  const [email, setEmail] = useState({})
   const [password, setPassword] = useState({})
   const onEmailChange = (e) => {
     setEmail(e.target.value)
@@ -16,26 +18,33 @@ function LoginForm() {
   const onPassChange = (e) => {
     setPassword(e.target.value)
   }
-  const onFinish = (values) => {
+  const onFinish = () => {
     login({
-      email: Email,
-      password: password
-    }).then(() => openNotificationSuccess())
+      email: email,
+      password: password,
+    }).then(res => openNotificationSuccess(res))
       .catch((error) => {
-        notification.error({
-          message: 'Incorrect email or password',
-          duration: 3,
-        })
+        // console.log(error)
+        if (error.request.status === 400) { 
+          notification.error({
+              message: 'Incorrect email or password',
+              duration: 3,
+            })
+        }
       })
   };
-  const openNotificationSuccess = () => {
+  const openNotificationSuccess = (res) => {
     notification.success({
       message: 'Welcome back!',
       duration: 3,
     })
-    console.log('success')
+    localStorage['id'] =res.data.id;
+    localStorage['email'] = res.data.email;
+    localStorage['name'] = res.data.name;
+    localStorage['phone'] = res.data.phone;
+    localStorage['role'] = res.data.role;
+    navigate("/viewproduct_detail");
   }
-
   return (
     <div className='home-login'>
       <div className='header'>
