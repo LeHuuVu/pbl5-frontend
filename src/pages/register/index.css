@@ -1,5 +1,10 @@
 .bt-register{
-    /* margin: 1% 15%; */
+    margin: 1% 15%;
     /* text-align: center; */
     /* align-items: center; */
+}
+.div_border{
+    border: 2px solid rgb(175, 172, 172);
+    border-radius: 2%;
+    margin-top: 50px;
 }
