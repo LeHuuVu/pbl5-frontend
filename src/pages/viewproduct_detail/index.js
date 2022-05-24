@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { Image, Descriptions, Table, Tag, Space, Button, Form } from 'antd';
 import './index.css'
+import Layout from '../../layouts/Layout'
 
 // const columns = [
 //     {
@@ -44,7 +46,9 @@ import './index.css'
 // }
 
 function ViewProduct_Detai() {
-    return (
+    return (    
+    <Layout>
+        <Layout.Main>
         <div >
             <div style={{width:"50%", float:"left", textAlign:"right"}}>
                 <img
@@ -104,6 +108,9 @@ function ViewProduct_Detai() {
                 </Form.Item>
             </Form> */}
         </div>
+        
+      </Layout.Main>
+    </Layout>
     );
 }
 
