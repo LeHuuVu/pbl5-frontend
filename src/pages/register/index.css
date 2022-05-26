@@ -1,10 +1,6 @@
-.bt-register{
-    margin: 1% 15%;
-    /* text-align: center; */
-    /* align-items: center; */
-}
-.div_border{
-    border: 2px solid rgb(175, 172, 172);
-    border-radius: 2%;
-    margin-top: 50px;
+.bt_register{
+  margin-left: 135px;
+  /* text-align: center; */
+  /* justify-i tems: center; */
+  /* background-color: rgb(57, 219, 152); */
 }
