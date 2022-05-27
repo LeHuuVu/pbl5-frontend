@@ -152,13 +152,45 @@ import 'antd/dist/antd.css';
 import './style.css';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import logo from 'E:/Benkyou/Nam_III_KY_II/PBL5/pbl5-frontend/src/logo_app.svg';
+import { useNavigate } from "react-router-dom";
 
-const NormalLoginForm = () => {
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+function LoginForm() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState({})
+  const [password, setPassword] = useState({})
+  const onEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
+  const onPassChange = (e) => {
+    setPassword(e.target.value)
+  }
+  const onFinish = () => {
+    login({
+      email: email,
+      password: password,
+    }).then(res => openNotificationSuccess(res))
+      .catch((error) => {
+        // console.log(error)
+        if (error.request.status === 400) { 
+          notification.error({
+              message: 'Incorrect email or password',
+              duration: 3,
+            })
+        }
+      })
   };
-
+  const openNotificationSuccess = (res) => {
+    notification.success({
+      message: 'Welcome back!',
+      duration: 3,
+    })
+    localStorage['id'] =res.data.id;
+    localStorage['email'] = res.data.email;
+    localStorage['name'] = res.data.name;
+    localStorage['phone'] = res.data.phone;
+    localStorage['role'] = res.data.role;
+    navigate("/viewproduct_detail");
+  }
   return (
     <div>
       <div>
