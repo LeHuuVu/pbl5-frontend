@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { Image, Descriptions, Table, Tag, Space, Button, Form } from 'antd';
 import './index.css'
+import Layout from '../../layouts/Layout'
 
 // const columns = [
 //     {
@@ -44,9 +46,11 @@ import './index.css'
 // }
 
 function ViewProduct_Detai() {
-    return (
-        <div style={{marginLeft:'23%',float:'left'}}>
-            <div style={{ width: "30%", float: "left", textAlign: "right" }}>
+    return (    
+    <Layout>
+        <Layout.Main>
+        <div >
+            <div style={{width:"50%", float:"left", textAlign:"right"}}>
                 <img
                     width={500}
                     src="https://hc.com.vn/i/ecommerce/media/GD.005034_FEATURE_96547.jpg"
@@ -105,6 +109,9 @@ function ViewProduct_Detai() {
                 </Form.Item>
             </Form> */}
         </div>
+        
+      </Layout.Main>
+    </Layout>
     );
 }
 
