@@ -1,13 +1,11 @@
-// /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import React, { useState } from 'react'
-import 'antd/dist/antd.min.css';
-import { login } from '../../api/login';
+import React,{useState} from 'react';
 import 'antd/dist/antd.css';
 import './style.css';
-import { Form, Input, Button, Checkbox, notification } from 'antd';
+import { Form, Input, Button, Checkbox,notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
+import logo from '../../logo_app.svg';
+import login from '../../pages/login';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -49,7 +47,7 @@ function LoginForm() {
   return (
     <div>
       <div>
-        {/* header */}
+        
       </div>
       <div style={{ width: "50%", float: "left", textAlign: "right" }}>
         <img src={logo} style={{ height: '50%', width: 'auto', position: "inherit" }} />
@@ -70,42 +68,42 @@ function LoginForm() {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Username!',
+                  message: 'Vui lòng nhập Email/Tên đăng nhập!',
                 },
               ]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email/Tên đăng nhập" />
             </Form.Item>
             <Form.Item
               name="password"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Password!',
+                  message: 'Vui lòng nhập mật khẩu của bạn!',
                 },
               ]}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
               />
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
 
               <a className="login-form-forgot" href="">
-                Forgot password
+                Quên mật khẩu?
               </a>
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
-                Log in
+                Đăng nhập
               </Button>
-              Or <a href="http://localhost:3000/register">Register now!</a>
+              Hoặc <a href="http://localhost:3000/register">Đăng ký ngay!</a>
             </Form.Item>
           </Form>
         </div>
