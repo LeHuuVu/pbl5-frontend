@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Login from '../pages/login';
 import Dashboad from '../pages/dashboad';
 import Register from '../pages/register';
-import Profile from '../pages/profile';
+// import Profile from '../pages/profile';
 import Cart from '../pages/cart';
 import Product_detail from '../pages/product_detail';
 import Product_info from '../pages/product_info';
@@ -16,7 +16,7 @@ class App extends Component {
     <Router>
         <Routes>
           <Route path="/" element={<Login/>}/>
-          <Route path="/profile" element={<Profile/>}/>
+          {/* <Route path="/profile" element={<Profile/>}/> */}
           <Route path="/login" element={<Login/>}/>
           <Route path="/home" element={<Dashboad/>}/>
           <Route path="/register" element={<Register/>}/>
