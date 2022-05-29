@@ -38,14 +38,16 @@ function LoginForm() {
   }
   return (
     <div>
+      <title>E-Commerce Đăng nhập hoặc Đăng ký</title>
       <div>
         
       </div>
       <div style={{ width: "50%", float: "left", textAlign: "right" }}>
-        <img src={logo} style={{ height: '50%', width: 'auto', position: "inherit" }} />
+        {/*E-Commerce Website  */}
+        <img src={logo} style={{height: '50%',width:'auto',margin:'10% auto'}} />
       </div>
-      <div style={{ width: "24%", float: "left"}}>
-        <div style={{margin:'150px auto',backgroundColor:"rgb(108, 233, 160)", padding:"35px 50px",borderRadius:'20px', border:'2px solid white'}}>
+      <div style={{ width: "25%", float: "left"}}>
+        <div style={{margin:'18% auto',backgroundColor:"rgb(81 251 152)", padding:"35px 50px",borderRadius:'20px', border:'2px solid white'}}>
           <b style={{fontSize:"26px"}}>Đăng nhập</b><br /><br />
           <Form
             name="normal_login"
