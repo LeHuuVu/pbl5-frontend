@@ -1,3 +1,6 @@
+/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './style.css';
@@ -29,11 +32,8 @@ function LoginForm() {
       duration: 3,
     })
     localStorage.setItem("user-info", JSON.stringify(res.data));
-    // localStorage['id'] =res.data.id;
-    // localStorage['email'] = res.data.email;
-    // localStorage['name'] = res.data.name;
-    // localStorage['phone'] = res.data.phone;
-    // localStorage['role'] = res.data.role;
+    let user = localStorage.getItem('user-info');
+    console.log(user.name);
     navigate("/product_detail");
   }
   return (
