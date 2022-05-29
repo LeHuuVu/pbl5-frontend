@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Descriptions, Table, Tag, Space, Button, Form, InputNumber, Avatar, Comment, Tooltip } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate } from 'antd';
 import './index.css'
 import Layout from '../../layouts/Layout'
 
@@ -52,7 +52,12 @@ function Product_Detai() {
     const ExampleComment = ({ children }) => (
         <Comment
             actions={actions}
-            author={<a>Lê Hữu Vũ</a>}
+            author={
+                <>
+                    <b><a style={{ marginRight: '10px' }}>Lê Hữu Vũ</a></b>
+                    4.5<Rate allowHalf disabled defaultValue={1} />
+                </>
+            }
             avatar={
                 <Avatar src="https://joeschmoe.io/api/v1/random" alt="Lê Hữu Vũ" />
             }
@@ -63,11 +68,11 @@ function Product_Detai() {
                     their product prototypes beautifully and efficiently.
                 </p>
             }
-            // datetime={
-            //     <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-            //         <span>{moment().fromNow()}</span>
-            //     </Tooltip>
-            // }
+        // datetime={
+        //     <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+        //         <span>{moment().fromNow()}</span>
+        //     </Tooltip>
+        // }
         >
             {children}
         </Comment>
@@ -87,7 +92,10 @@ function Product_Detai() {
                             <h2>Chi tiết sản phẩm</h2>
                             <table>
                                 <tr>
-                                    <th colspan="2">NỒI CHIÊN KHÔNG DẦU</th>
+                                    <th colspan="2">NỒI CHIÊN KHÔNG DẦU
+                                        <b style={{ marginLeft: '30px' }}>| 4.5</b>
+                                        <Rate allowHalf disabled defaultValue={4.5} />
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Mô tả:</th>
@@ -121,14 +129,10 @@ function Product_Detai() {
                     </div>
                     <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
                         <h2>Đánh giá</h2>
-                        <ExampleComment>
-                            <ExampleComment>
-                                <ExampleComment></ExampleComment>
-                                <ExampleComment></ExampleComment>
-                            </ExampleComment>
-                            <ExampleComment>
-                            </ExampleComment>
-                        </ExampleComment>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
                     </div>
                 </div>
 

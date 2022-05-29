@@ -17,7 +17,7 @@ export default function Navbar() {
       // if (response.request.status === 200) {
       //   window.location = '/'
       // }
-      window.location.href = '/dashboard';
+      window.location.href = '/login';
     } catch (error) {
       if (error.request.status === 400) {
         console.log(error)
