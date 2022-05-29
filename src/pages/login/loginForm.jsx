@@ -1,12 +1,11 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
-import React, { useState } from 'react'
-import 'antd/dist/antd.min.css';
-import "./style.css";
-import { login } from '../../api/login'
-import { Form, Input, Button, Checkbox, notification } from 'antd';
+import React,{useState} from 'react';
+import 'antd/dist/antd.css';
+import './style.css';
+import { Form, Input, Button, Checkbox,notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
+import logo from '../../logo_app.svg';
+import login from '../../pages/login';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -46,76 +45,72 @@ function LoginForm() {
     navigate("/viewproduct_detail");
   }
   return (
-    <div className='home-login'>
-      <div className='header'>
-        <h1>Welcome!</h1>
-        <h2>Login Pages</h2>
+    <div>
+      <div>
+        
       </div>
-      <div className='login-boder'>
-      <Form
-        // style={{
-        //   align:'center',
-        // }}
-        name="normal_login"
-        // className="login-form"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-      >
-        {/* <Form.Item {...formItemLayout}> */}
-        <Form.Item
-          name="Email"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your Email!',
-            },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email"
-            onChange={onEmailChange} />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your Password!',
-            },
-          ]}
-        >
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-            onChange={onPassChange}
-          />
-        </Form.Item>
-        {/* </Form.Item> */}
-
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox >Remember me</Checkbox><br />
-          </Form.Item>
-
-          <a className="login-form-forgot" href="">
-            Forgot password?
-          </a>
-        </Form.Item>
-
-        <Form.Item className='bt-login-register'>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Log in
-          </Button><br/><br/>
-          <p>Or <a href="">Register now!</a></p>
-        </Form.Item>
-      </Form>
+      <div style={{ width: "50%", float: "left", textAlign: "right" }}>
+        <img src={logo} style={{ height: '50%', width: 'auto', position: "inherit" }} />
       </div>
-      
+      <div style={{ width: "24%", float: "left"}}>
+        <div style={{margin:'150px auto',backgroundColor:"rgb(108, 233, 160)", padding:"35px 50px",borderRadius:'20px', border:'2px solid white'}}>
+          <b style={{fontSize:"26px"}}>Đăng nhập</b><br /><br />
+          <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập Email/Tên đăng nhập!',
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email/Tên đăng nhập" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu của bạn!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Mật khẩu"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Ghi nhớ đăng nhập</Checkbox>
+              </Form.Item>
+
+              <a className="login-form-forgot" href="">
+                Quên mật khẩu?
+              </a>
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-form-button">
+                Đăng nhập
+              </Button>
+              Hoặc <a href="http://localhost:3000/register">Đăng ký ngay!</a>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
     </div>
-  )
-}
-export default LoginForm
+
+  );
+};
+
+export default () => <LoginForm />;
