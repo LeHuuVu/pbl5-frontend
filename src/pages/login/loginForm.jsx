@@ -34,7 +34,7 @@ function LoginForm() {
     localStorage.setItem("user-info", JSON.stringify(res.data));
     let user = localStorage.getItem('user-info');
     console.log(user.name);
-    navigate("/product_detail");
+    navigate("/productList");
   }
   return (
     <div>

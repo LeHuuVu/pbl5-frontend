@@ -68,7 +68,7 @@ const RegisterForm = () => {
                             onValuesChange={onFormLayoutChange}
                             size={componentSize}
                         >
-                            <Form.Item label="Người mua:" valuePropName="checked">
+                            <Form.Item label="Người bán:" valuePropName="checked">
                                 <Switch />
                             </Form.Item>
                             <Form.Item
