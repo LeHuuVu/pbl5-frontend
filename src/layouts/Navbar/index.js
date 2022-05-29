@@ -8,31 +8,33 @@ import logo from '../../logo_app.png';
 
 export default function Navbar() {
   const { Search } = Input;
-
   const onSearch = (value) => console.log(value);
+  let user = localStorage.getItem('user-info');
   const handleLogout = async () => {
     try {
+      console.log('logout')
       // const response = await logout()
+      localStorage.clear();
+      console.log(localStorage.getItem('user-info'))
       // if (response.request.status === 200) {
       //   window.location = '/'
       // }
+      window.location.href = '/dashboard';
     } catch (error) {
       if (error.request.status === 400) {
         console.log(error)
       }
     }
   }
-  const userInformations = (
-    <Menu className="border-2 rounded-2xl py-2 top-3 absolute transform -translate-x-1/2 left-1/2" style={{width:200,float:'right',margin:30}}>
+  const userInformation = (
+    <Menu className="border-2 rounded-2xl py-2 top-3 absolute transform -translate-x-1/2 left-1/2" style={{width:200,float:'right',margin:30}}>  
       <Menu.Item key="0">
         <a href="/profile">
-          <a>Profile</a>
+          <a style={{color: "black"}}>Profile</a>
         </a>
       </Menu.Item>
       <Menu.Item key="1">
-        <a href="">
           <a onClick={handleLogout}>Logout</a>
-        </a>
       </Menu.Item>
     </Menu>
   )
@@ -55,7 +57,7 @@ export default function Navbar() {
       </div>
       <div className="flex px-16 items-center">
         <div className="px-4">
-          <Dropdown overlay={userInformations} trigger={['click']}>
+          <Dropdown overlay={userInformation} trigger={['click']}>
             <div className="px-2 border-4 border-white user-icon-container py-1 cursor-pointer avatarNavbar">
               <Avatar className="text-xl user-icon" style={{float:'right', width:'40px',height:'40px'}}/>
             </div>
