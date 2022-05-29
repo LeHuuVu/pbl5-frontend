@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-// import logo from '../../logo_app.svg';
-import {
-    Form,
-    Input,
-    Button,
-    Select,
-    Switch,
-    Checkbox,
-    Divider,
-} from 'antd';
 
-const ProductList = () => {
+const ProductListForm = () => {
     return (
         <div class="latest-articles" style={{ margin: "0px 15%" }}>
             {/* for (i=0; i<lengths(list anh)/4; i++){
@@ -143,4 +133,4 @@ const ProductList = () => {
     );
 };
 
-export default () => <ProductList />;
+export default () => <ProductListForm />;
