@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import logo from '../../logo_app.svg';
+import logo from '../../logo_app.png';
 import {
     Form,
     Input,
@@ -43,13 +43,13 @@ const RegisterForm = () => {
                 {/* header */}
             </div>
             <div style={{ width: "50%", float: "left", textAlign: "right" }}>
-                <img src={logo} style={{ height: '50%', width: 'auto', position: "inherit" }} />
+                <img src={logo} style={{ height: '50%', width: 'auto', margin: '20% auto' }} />
             </div>
             <div style={{ width: "30%", float: "left" }}>
                 <div>
 
                 </div>
-                <div style={{ margin: '80px auto', backgroundColor: "rgb(108, 233, 160)", padding: "35px 10px", borderRadius: '20px', border: '2px solid white' }}>
+                <div style={{ margin: '80px auto', backgroundColor: "rgb(81 251 152)", padding: "35px 10px", borderRadius: '20px', border: '2px solid white' }}>
                     <div style={{ textAlign: 'center' }}>
                         <b style={{ fontSize: "26px" }}>Đăng Ký Tài Khoản</b><br /><br />
                     </div>
