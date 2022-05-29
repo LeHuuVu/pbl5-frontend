@@ -56,15 +56,15 @@ export default function Navbar() {
       <div className="flex px-16 items-center">
         <div className="px-4">
           <Dropdown overlay={userInformations} trigger={['click']}>
-            <div className="px-2 border-4 border-white user-icon-container py-1 cursor-pointer">
-              <Avatar className="text-xl user-icon" style={{float:'right'}}/>
+            <div className="px-2 border-4 border-white user-icon-container py-1 cursor-pointer avatarNavbar">
+              <Avatar className="text-xl user-icon" style={{float:'right', width:'40px',height:'40px'}}/>
             </div>
           </Dropdown>
         </div>
       </div>
-      <div className="flex px-16 items-center" style={{float:'right'}}>
+      <div className="flex px-16 items-center cartNavbar" style={{float:'right'}}>
         <div className="px-4">
-        <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" />} />
+        <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%'}}/>} />
         </div>
       </div>
     </div>
