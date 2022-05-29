@@ -5,8 +5,8 @@ import Register from '../pages/register';
 import ProductList from '../pages/product_list';
 // import Profile from '../pages/profile';
 import Cart from '../pages/cart';
-import Product_detail from '../pages/product_detail';
-import Product_info from '../pages/product_info';
+import ProductDetail from '../pages/product_detail';
+import ProductInfo from '../pages/product_info';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 

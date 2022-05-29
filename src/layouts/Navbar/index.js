@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import './style.scss';
+import logo from '../../logo_app.png';
 
 export default function Navbar() {
   const { Search } = Input;
@@ -37,44 +38,33 @@ export default function Navbar() {
   )
 
   return (
-    // <div>
-    //   <Avatar className="text-xl user-icon" style={{float:'right'}}/>
-    //   <Space direction="vertical" style={{float:'right'}}>
-    //     <Search placeholder="input search text" onSearch={onSearch} enterButton />
-    //   </Space>
-    //   <div className="w-20 ml-16">
-    //     <a href="/top-page">
-    //       <img src="../../Slide1.svg" alt="logo" />
-    //     </a>
-    //   </div>
-    // </div>
     <div className="flex justify-between items-center border-2 navbar select-none">
       <div className="flex"  style={{float:'left'}}>
         <div className="w-20 ml-16">
-          <a href="/top-page">
-              <img src="../../Slide1.svg" alt="logo" />
+          <a href="/dashboard" >
+              <img src={logo} alt="logo" className="logo"/>
           </a>
         </div>
       </div>
-      <div className="flex items-center search" style={{float:'left' }}>
+      <div className="flex items-center searchNavbar" style={{float:'left' }}>
           <div className="px-8" >
           <Space direction="vertical">
-            <Search style={{width: 500}} placeholder="input search text" onSearch={onSearch} enterButton />
+            <Search style={{width: 500, height: 20}} placeholder="input search text" onSearch={onSearch} enterButton />
           </Space>
           </div>
       </div>
       <div className="flex px-16 items-center">
         <div className="px-4">
           <Dropdown overlay={userInformations} trigger={['click']}>
-            <div className="px-2 border-4 border-white user-icon-container py-1 cursor-pointer">
-              <Avatar className="text-xl user-icon" style={{float:'right'}}/>
+            <div className="px-2 border-4 border-white user-icon-container py-1 cursor-pointer avatarNavbar">
+              <Avatar className="text-xl user-icon" style={{float:'right', width:'40px',height:'40px'}}/>
             </div>
           </Dropdown>
         </div>
       </div>
-      <div className="flex px-16 items-center" style={{float:'right'}}>
+      <div className="flex px-16 items-center cartNavbar" style={{float:'right'}}>
         <div className="px-4">
-        <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" />} />
+        <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%'}}/>} />
         </div>
       </div>
     </div>
