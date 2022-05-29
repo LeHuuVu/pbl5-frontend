@@ -1,0 +1,91 @@
+.latest-articles {
+    width: 80%;
+    /* text-align: right; */
+}
+
+.article {
+    width: 20%;
+    height: 17%;
+}
+
+.latest-articles .latest-articles-wrapper {
+    margin: 50px 0px;
+}
+
+.latest-articles .latest-articles-wrapper .article img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.latest-articles .latest-articles-wrapper .article .article-meta {
+    white-space: nowrap;
+    padding: 20px 0px;
+    margin: 0;
+}
+
+.latest-articles .latest-articles-wrapper .article .article-meta img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.latest-articles .latest-articles-wrapper .article a:hover {
+    color: #d45b5f;
+}
+
+.sidebar .latest-articles-wrapper {
+    margin-top: 40px;
+}
+
+.sidebar .latest-articles-wrapper .article {
+    margin-bottom: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 20px;
+}
+
+.latest-articles-wrapper .article .arcticle-photo {
+    height: 120px;
+    min-width: 120px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.latest-articles-wrapper .article .arcticle-photo img {
+    height: 100%;
+}
+
+.latest-articles-wrapper .article .article-text {
+    font-size: 0.9em;
+}
+
+.latest-articles-wrapper .article .article-text a:hover {
+    color: #d45b5f;
+}
+
+.latest-articles-wrapper .article .article-text h5 {
+    margin-bottom: 0px;
+}
+
+.latest-articles-wrapper .article .article-text .article-meta {
+    margin: 8px 0px;
+    font-size: 0.8em;
+}
+
+.latest-articles-wrapper .article .article-meta img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+@media (min-width: 768px) {
+    .latest-articles .latest-articles-wrapper {
+        margin: 50px 0px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        gap: 50px;
+      }
+      .latest-articles .latest-articles-wrapper .article {
+        text-align: left;
+      }
+}
