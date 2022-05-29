@@ -7,8 +7,8 @@ import Layout from '../../layouts/Layout'
 
 function Login() {
   
-  // if(localStorage['role']!=null) {window.location.href = '/product_detail'}
-  // else{
+  if(localStorage['user-info']!=null) {window.location.href = '/product_detail'}
+  else{
     return (      
     <Layout>
       <Layout.Main>
@@ -18,6 +18,6 @@ function Login() {
       </Layout.Main>
     </Layout>
       )
-  // }
+  }
 }
 export default Login

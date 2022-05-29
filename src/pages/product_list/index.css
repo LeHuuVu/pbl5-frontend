@@ -1,6 +1,8 @@
 .latest-articles {
-    width: 80%;
+    max-width: 90%;
     /* text-align: right; */
+    display:flex;
+    flex-wrap: wrap;
 }
 
 .article {
@@ -9,13 +11,14 @@
 }
 
 .latest-articles .latest-articles-wrapper {
-    margin: 50px 0px;
+    min-width: 200px;
+    flex: 1;
 }
 
-.latest-articles .latest-articles-wrapper .article img {
+/* .latest-articles .latest-articles-wrapper .article img {
     width: 100%;
     border-radius: 10px;
-}
+} */
 
 .latest-articles .latest-articles-wrapper .article .article-meta {
     white-space: nowrap;
@@ -79,7 +82,7 @@
 
 @media (min-width: 768px) {
     .latest-articles .latest-articles-wrapper {
-        margin: 50px 0px;
+        margin: 50px 20px;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
