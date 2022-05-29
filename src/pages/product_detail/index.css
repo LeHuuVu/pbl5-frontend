@@ -1,7 +1,13 @@
-.center {
-    margin-left: 10%; 
-    text-align: center;
-  }
-.des-item{
-    text-align: center;
+td{
+  padding: 10px 8px;
+  text-align: justify;
+}
+th {
+  width: 80px;
+  text-align: left;
+  padding: 10px 5px;
+  font-size: 15px;
+}
+table{
+  margin-bottom: 20px;
 }
