@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import './style.scss';
+import logo from '../../logo_app.png';
 
 export default function Navbar() {
   const { Search } = Input;
@@ -37,29 +38,18 @@ export default function Navbar() {
   )
 
   return (
-    // <div>
-    //   <Avatar className="text-xl user-icon" style={{float:'right'}}/>
-    //   <Space direction="vertical" style={{float:'right'}}>
-    //     <Search placeholder="input search text" onSearch={onSearch} enterButton />
-    //   </Space>
-    //   <div className="w-20 ml-16">
-    //     <a href="/top-page">
-    //       <img src="../../Slide1.svg" alt="logo" />
-    //     </a>
-    //   </div>
-    // </div>
     <div className="flex justify-between items-center border-2 navbar select-none">
       <div className="flex"  style={{float:'left'}}>
         <div className="w-20 ml-16">
-          <a href="/top-page">
-              <img src="../../Slide1.svg" alt="logo" />
+          <a href="/dashboard" >
+              <img src={logo} alt="logo" className="logo"/>
           </a>
         </div>
       </div>
-      <div className="flex items-center search" style={{float:'left' }}>
+      <div className="flex items-center searchNavbar" style={{float:'left' }}>
           <div className="px-8" >
           <Space direction="vertical">
-            <Search style={{width: 500}} placeholder="input search text" onSearch={onSearch} enterButton />
+            <Search style={{width: 500, height: 20}} placeholder="input search text" onSearch={onSearch} enterButton />
           </Space>
           </div>
       </div>
