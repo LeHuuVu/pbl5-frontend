@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import logo from 'E:/Benkyou/Nam_III_KY_II/PBL5/pbl5-frontend/src/logo_app.svg';
+import logo from '../../logo_app.svg';
 import {
     Form,
     Input,

@@ -4,23 +4,15 @@ import './style.css';
 import { Form, Input, Button, Checkbox,notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import logo from '../../logo_app.svg';
-import login from '../../pages/login';
+import logo from '../../logo_app.png';
+import {login} from '../../api/login';
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState({})
-  const [password, setPassword] = useState({})
-  const onEmailChange = (e) => {
-    setEmail(e.target.value)
-  }
-  const onPassChange = (e) => {
-    setPassword(e.target.value)
-  }
   const onFinish = () => {
     login({
-      email: email,
-      password: password,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
     }).then(res => openNotificationSuccess(res))
       .catch((error) => {
         // console.log(error)

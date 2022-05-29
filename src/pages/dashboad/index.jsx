@@ -1,5 +1,5 @@
 import React from "react";
-import logo from 'E:/Benkyou/Nam_III_KY_II/PBL5/pbl5-frontend/src/logo_app.svg';
+import logo from '../../logo_app.svg';
 import "./index.css";
 import {} from 'react-bootstrap'
 function Dashboard() {
