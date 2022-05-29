@@ -1,0 +1,36 @@
+@import 'antd/dist/antd.min.css';
+.navbar {
+    background-color: #e3f6f5;
+    color: #272343;
+    font-size: 16px;
+    padding:10;
+    display: 'flex';
+    padding: 10px;
+}
+.cartNavbar{  
+    margin-right: 30px;
+}
+.avatarNavbar{
+    margin-right: 30px;
+}
+.searchNavbar{
+    margin-left: 20%;
+}
+img.logo{
+    width: 60px;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+.cursor-pointer{
+    .bell-icon {
+        color: #ffd803;
+    }
+}
+
+.number-notifications {
+    color: #F14E2B;
+}
+.user-icon-container {
+    border-radius: 50%;
+    background-color: #ffd803;
+}
