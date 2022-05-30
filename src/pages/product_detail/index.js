@@ -1,92 +1,144 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Descriptions, Table, Tag, Space, Button, Form } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate } from 'antd';
 import './index.css'
 import Layout from '../../layouts/Layout'
 
-// const columns = [
-//     {
-//         title: '',
-//         dataIndex: 'imgProduct',
-//     },
-//     {
-//         title: '',
-//         dataIndex: 'infoProduct',
-//     },
-// ];
+import React, { useState } from 'react';
+import 'antd/dist/antd.css';
+import './index.css';
+import {
+    DislikeFilled,
+    DislikeOutlined,
+    LikeFilled,
+    LikeOutlined,
+} from '@ant-design/icons';
 
-// const data = [];
-// for (let i = 0; i < 1; i++) {
-//     data.push({
-//         key: i,
-//         imgProduct: <img
-//             width={400}
-//             src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-//             style={{ display: 'inline-block', marginRight: '16px' }}
-//         />,
-//         infoProduct: <Descriptions title="Product Detail" layout="horizontal" >
-//             <Descriptions.Item label="Product Name">Nồi chiên không dầu</Descriptions.Item><br /><br />
-//             <Descriptions.Item label="Price">1810000000</Descriptions.Item><br /><br />
-//             <Descriptions.Item label="Description">NỒI CHIÊN KHÔNG DẦU ĐA NĂNG
-//                 Nồi chiên tích hợp lò sấy và nướng đa năng
-//                 Dung tích 14 lít.
-//                 Thiết kế vô cùng bắt mắt cùng màu xanh coban sang trọng và hiện đại
-//                 Công suất mạnh mẽ 1700w, hoạt động gia nhiệt trên, gia nhiệt dưới cùng quạt đối lưu sẽ giúp chín đều thực phẩm, không cần lật thực phẩm trong quá trình nấu nướng
-//                 Có 16 chức năng để lựa chọn, dễ dàng làm vô số món ăn và món bánh,...bằng NCKD thông minh này
-//                 Màn hình cảm ứng điện tử hiện đại, nắp kính sang trọng giúp dễ dàng quan sát thực phẩm bên trong
-//             </Descriptions.Item><br /><br />
-//             <Descriptions.Item label="Amount_remaining" span={2}>152</Descriptions.Item><br /><br />
-//         </Descriptions>,
-//         // delProduct: <Form.Item>
-//         // {/*  <Form.Item {...formTailLayout}> */}
-//         //                 <Button type="primary">
-//         //                     Delete
-//         //                 </Button>
-//         //             </Form.Item>
-//     });
-// }
+function Product_Detai() {
 
-function ViewProduct_Detai() {
-    return (    
-    <Layout>
-        <Layout.Main>
-        <div >
-            <div style={{width:"50%", float:"left", textAlign:"right"}}>
-                <img
-                    width={500}
-                    src="https://hc.com.vn/i/ecommerce/media/GD.005034_FEATURE_96547.jpg"
-                    style={{ display: 'inline-block', marginTop: '100px' }}
-                />
-            </div>
+    const [likes, setLikes] = useState(0);
+    const [dislikes, setDislikes] = useState(0);
+    const [action, setAction] = useState(null);
 
-            <div style={{ width: "70%", float: "left" }}>
-                <div>
-                    {/* <Form> */}
-                        <Descriptions title="Product Detail" layout="horizontal" >
-                            <Descriptions.Item label="Product Name">NỒI CHIÊN KHÔNG DẦU ĐA NĂNG</Descriptions.Item><br /><br />
-                            <Descriptions.Item label="Price">1810000000</Descriptions.Item><br /><br />
-                            <Descriptions.Item label="Description">Nồi chiên tích hợp lò sấy và nướng đa năng.
-                                Dung tích 14 lít.
-                                Thiết kế vô cùng bắt mắt cùng màu xanh coban sang trọng và hiện đại.
-                                Công suất mạnh mẽ 1700w, hoạt động gia nhiệt trên, gia nhiệt dưới cùng quạt đối lưu sẽ giúp chín đều thực phẩm, không cần lật thực phẩm trong quá trình nấu nướng.
-                                Có 16 chức năng để lựa chọn, dễ dàng làm vô số món ăn và món bánh,...bằng NCKD thông minh này.
-                                Màn hình cảm ứng điện tử hiện đại, nắp kính sang trọng giúp dễ dàng quan sát thực phẩm bên trong.
-                            </Descriptions.Item><br /><br />
-                            <Descriptions.Item label="Amount_remaining" span={2}>152</Descriptions.Item><br /><br />
-                        </Descriptions>
+    const like = () => {
+        setLikes(1);
+        setDislikes(0);
+        setAction('liked');
+    };
+
+    const dislike = () => {
+        setLikes(0);
+        setDislikes(1);
+        setAction('disliked');
+    };
+
+    const actions = [
+        <Tooltip key="comment-basic-like" title="Like">
+            <span onClick={like}>
+                {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                <span className="comment-action">{likes}</span>
+            </span>
+        </Tooltip>,
+        <Tooltip key="comment-basic-dislike" title="Dislike">
+            <span onClick={dislike}>
+                {React.createElement(
+                    action === 'disliked' ? DislikeFilled : DislikeOutlined
+                )}
+                <span className="comment-action">{dislikes}</span>
+            </span>
+        </Tooltip>,
+        <span key="comment-basic-reply-to">Reply to</span>,
+    ];
+
+    const ExampleComment = ({ children }) => (
+        <Comment
+            actions={actions}
+            author={
+                <>
+                    <b><a style={{ marginRight: '10px' }}>Lê Hữu Vũ</a></b>
+                    4.5<Rate allowHalf disabled defaultValue={1} />
+                </>
+            }
+            avatar={
+                <Avatar src="https://joeschmoe.io/api/v1/random" alt="Lê Hữu Vũ" />
+            }
+            content={
+                <p>
+                    We supply a series of design principles, practical patterns and high
+                    quality design resources (Sketch and Axure), to help people create
+                    their product prototypes beautifully and efficiently.
+                </p>
+            }
+        // datetime={
+        //     <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+        //         <span>{moment().fromNow()}</span>
+        //     </Tooltip>
+        // }
+        >
+            {children}
+        </Comment>
+    );
+    return (
+        <Layout>
+            <Layout.Main>
+                <div >
+                    <div style={{ width: '40%', float: 'left', textAlign: 'right' }}>
+                        <Image
+                            width={'65%'}
+                            src="https://hc.com.vn/i/ecommerce/media/GD.005034_FEATURE_96547.jpg"
+                        />
+                    </div>
+                    <div style={{ width: '57%', float: 'left', marginLeft: '20px' }}>
+                        <div style={{ width: '75%' }}>
+                            <h2>Chi tiết sản phẩm</h2>
+                            <table>
+                                <tr>
+                                    <th colspan="2">NỒI CHIÊN KHÔNG DẦU
+                                        <b style={{ marginLeft: '30px' }}>| 4.5</b>
+                                        <Rate allowHalf disabled defaultValue={4.5} />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Mô tả:</th>
+                                    <td>
+                                        Nồi chiên tích hợp lò sấy và nướng đa năng. Dung tích 14 lít. Thiết
+                                        kế vô cùng bắt mắt cùng màu xanh coban sang trọng và hiện đại. Công
+                                        suất mạnh mẽ 1700w, hoạt động gia nhiệt trên, gia nhiệt dưới cùng
+                                        quạt đối lưu sẽ giúp chín đều thực phẩm, không cần lật thực phẩm
+                                        trong quá trình nấu nướng. Có 16 chức năng để lựa chọn, dễ dàng làm
+                                        vô số món ăn và món bánh,...bằng NCKD thông minh này. Màn hình cảm
+                                        ứng điện tử hiện đại, nắp kính sang trọng giúp dễ dàng quan sát thực
+                                        phẩm bên trong.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Giá:</th>
+                                    <td>1810000000</td>
+                                </tr>
+                                <tr>
+                                    <th>Số lượng:</th>
+                                    <td>
+                                        <InputNumber defaultValue={1} size={10} style={{ marginRight: '10px' }} /> 152 sản phẩm có sẵn
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                         <Form.Item>
-                            <Button style={{marginRight:'10px'}}>Thêm vào Giỏ hàng</Button>
-                            <Button type="primary" >
-                                Mua
-                            </Button>
+                            <Button style={{ marginRight: '10px', marginBottom: '20px' }}>Thêm vào Giỏ hàng</Button>
+                            <Button type="primary">Mua</Button>
                         </Form.Item>
-                    {/* </Form> */}
+                    </div>
+                    <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
+                        <h2>Đánh giá</h2>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
+                        <ExampleComment></ExampleComment>
+                    </div>
                 </div>
-            </div>
-        </div>
-        
-      </Layout.Main>
-    </Layout>
+
+            </Layout.Main>
+        </Layout>
     );
 }
 
-export default ViewProduct_Detai;
+export default Product_Detai;

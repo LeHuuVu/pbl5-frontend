@@ -1,4 +1,7 @@
-import React,{useState} from 'react';
+/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react';
 import 'antd/dist/antd.css';
 import './style.css';
 import { Form, Input, Button, Checkbox,notification } from 'antd';
@@ -9,13 +12,12 @@ import {login} from '../../api/login';
 
 function LoginForm() {
   const navigate = useNavigate();
-  const onFinish = () => {
-    login({
-      email: document.getElementById('email').value,
-      password: document.getElementById('password').value,
+  const onFinish = async (values) => {
+    await login({
+      email: values.email,
+      password: values.password,
     }).then(res => openNotificationSuccess(res))
       .catch((error) => {
-        // console.log(error)
         if (error.request.status === 400) { 
           notification.error({
               message: 'Incorrect email or password',
@@ -29,12 +31,10 @@ function LoginForm() {
       message: 'Welcome back!',
       duration: 3,
     })
-    localStorage['id'] =res.data.id;
-    localStorage['email'] = res.data.email;
-    localStorage['name'] = res.data.name;
-    localStorage['phone'] = res.data.phone;
-    localStorage['role'] = res.data.role;
-    navigate("/product_detail");
+    localStorage.setItem("user-info", JSON.stringify(res.data));
+    let user = localStorage.getItem('user-info');
+    console.log(user.name);
+    navigate("/productList");
   }
   return (
     <div>
@@ -58,7 +58,7 @@ function LoginForm() {
             onFinish={onFinish}
           >
             <Form.Item
-              name="username"
+              name="email"
               rules={[
                 {
                   required: true,
