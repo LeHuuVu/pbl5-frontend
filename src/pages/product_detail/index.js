@@ -100,7 +100,7 @@ function Product_Detai() {
                             author={
                                 <>
                                     <b><a style={{ marginRight: '10px' }}>{item.user_name}</a></b>
-                                    {item.review.star_rating}<Rate allowHalf disabled value={item.review.star_rating} />
+                                    <Rate disabled value={item.review.star_rating} />
                                 </>
                             }
                             avatar={
