@@ -22,7 +22,7 @@ class App extends Component {
           <Route path="/home" element={<Dashboad/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/cart" element={<Cart/>}/>
-          <Route path="/product_detail" element={<ProductDetail/>}/>
+          <Route path="/product_detail/:id" element={<ProductDetail/>}/>
           <Route path="/product_info" element={<ProductInfo/>}/>
           <Route path="/productList" element={<ProductList/>}/>
         </Routes>
