@@ -162,7 +162,7 @@ const RegisterForm = () => {
                                     Đăng ký
                                 </Button>
                                 <Button type="primary" htmlType="exit" style={{ marginLeft: '20px' }}>
-                                    <a href='http://localhost:3000/login'>Hủy</a>
+                                    <a href='/login' style={{textDecoration:'none'}}>Hủy</a>
                                 </Button>
                             </Form.Item>
                         </Form>

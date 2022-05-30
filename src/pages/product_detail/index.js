@@ -14,6 +14,7 @@ import {
 } from '@ant-design/icons';
 
 function Product_Detai() {
+    if(localStorage['user-info']==null) {window.location.href = '/login'}
 
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -124,7 +125,7 @@ function Product_Detai() {
                         </div>
                         <Form.Item>
                             <Button style={{ marginRight: '10px', marginBottom: '20px' }}>Thêm vào Giỏ hàng</Button>
-                            <Button type="primary">Mua</Button>
+                            <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }} >Mua</Button>
                         </Form.Item>
                     </div>
                     <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
