@@ -32,6 +32,8 @@ function LoginForm() {
       duration: 3,
     })
     localStorage.setItem("user-info", JSON.stringify(res.data));
+    //retrieve data 
+    // JSON.parse(localStorage.getItem('user-info'))
     let user = localStorage.getItem('user-info');
     console.log(user.name);
     navigate("/productList");

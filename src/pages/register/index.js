@@ -7,7 +7,7 @@ import Layout from '../../layouts/Layout'
 
 function Register() {
 
-  if (localStorage['role'] != null) { window.location.href = '/product_detail' }
+  if (localStorage['role'] != null) { window.location.href = '/productList' }
   else {
     return (
       <Layout>
