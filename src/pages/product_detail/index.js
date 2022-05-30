@@ -29,6 +29,7 @@ function averageRate(list_review){
     return 0;
 }
 function Product_Detai() {
+    if(localStorage['user-info']==null) {window.location.href = '/login'}
     const { id } = useParams();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);

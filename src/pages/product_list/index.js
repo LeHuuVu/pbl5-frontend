@@ -7,7 +7,7 @@ import Layout from '../../layouts/Layout'
 
 function ProductList() {
   
-  if(localStorage['role']!=null) {window.location.href = '/viewproduct_detail'}
+  if(localStorage['user-info']==null) {window.location.href = '/login'}
   else{
     return (      
     <Layout>
