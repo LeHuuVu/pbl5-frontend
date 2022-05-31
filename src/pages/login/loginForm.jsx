@@ -18,24 +18,23 @@ function LoginForm() {
       password: values.password,
     }).then(res => openNotificationSuccess(res))
       .catch((error) => {
+        console.log(error)
         if (error.request.status === 400) { 
           notification.error({
-              message: 'Incorrect email or password',
+              message: 'Sai email hoặc mật khẩu',
               duration: 3,
             })
         }
       })
   };
   const openNotificationSuccess = (res) => {
+    localStorage.setItem("user-info", JSON.stringify(res.data));
     notification.success({
-      message: 'Welcome back!',
+      message: 'Chào mừng bạn quay lại, '+res.data.name+"!",
       duration: 3,
     })
-    localStorage.setItem("user-info", JSON.stringify(res.data));
     //retrieve data 
     // JSON.parse(localStorage.getItem('user-info'))
-    let user = localStorage.getItem('user-info');
-    console.log(user.name);
     navigate("/productList");
   }
   return (
