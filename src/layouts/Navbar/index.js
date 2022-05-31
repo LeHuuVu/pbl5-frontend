@@ -5,8 +5,11 @@ import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import './style.scss';
 import logo from '../../logo_app.png';
+import { useSelector  } from "react-redux";
+import { selectUserInfo } from "../../store/userSlice";
 
 export default function Navbar() {
+  const userInfo = useSelector(selectUserInfo);
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
   let user = localStorage.getItem('user-info');
@@ -37,7 +40,7 @@ export default function Navbar() {
     </Menu>
   )
   let checkLogin
-  if (user == null){
+  if (userInfo.name == null){
     checkLogin = (
       <div>
         <a href="/Register" style={{padding:10}}> Đăng ký</a>

@@ -6,9 +6,6 @@ import 'antd/dist/antd.min.css';
 import Layout from '../../layouts/Layout'
 
 function ProductList() {
-  
-  if(localStorage['user-info']==null) {window.location.href = '/login'}
-  else{
     return (      
     <Layout>
       <Layout.Main>
@@ -18,6 +15,5 @@ function ProductList() {
       </Layout.Main>
     </Layout>
       )
-  }
 }
 export default ProductList
