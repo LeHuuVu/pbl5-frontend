@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification } from 'antd';
 import './index.css'
 import Layout from '../../layouts/Layout'
 import { useParams } from 'react-router';
@@ -16,6 +16,8 @@ import {
 } from '@ant-design/icons';
 import { productDetail } from '../../api/buyerInterface';
 import moment from 'moment';
+import { addProdToCart } from '../../api/cart';
+import { useNavigate } from "react-router-dom";
 
 function averageRate(list_review) {
     if (list_review !== undefined) {
@@ -36,16 +38,13 @@ function Product_Detai() {
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
-    // const [review, setReview] = useState([]);
     const [product, setProduct] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
+    const navigate = useNavigate();
 
     try {
         useEffect(async () => {
             try {
-                // await getReview({id_product : id}).then((res) => {
-                //     setReview((review)=>res.data);
-                // }).catch((error) => console.log(error.response.request.response))
                 await productDetail({ id_product: id }).then((res) => {
                     setProduct((product) => res.data);
                 }).catch((error) => console.log(error.response.request.response))
@@ -58,6 +57,28 @@ function Product_Detai() {
             setTotalRate(averageRate(product.list_review))
         } catch (e) { console.error(e) }
     }, [product])
+
+    const userId = JSON.parse(localStorage.getItem('user-info')).id
+    const OnClick = async () => {
+        await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
+            openNotificationSuccess(res)
+        }).catch((error) => {
+            if (error.request.status === 400) {
+                notification.error({
+                    message: 'This product already exists in the cart',
+                    duration: 3,
+                })
+            }
+        })
+    }
+
+    const openNotificationSuccess = (res) => {
+        notification.success({
+            message: "Đã thêm " + product.product.name + " vào Giỏ!",
+            duration: 3,
+        })
+        navigate("/productList");
+    }
 
     const like = () => {
         setLikes(1);
@@ -90,7 +111,6 @@ function Product_Detai() {
         <span key="comment-basic-reply-to">Reply to</span>,
     ];
 
-    // console.log(totalRate);
     let comments;
     let review;
     if (product !== null) {
@@ -120,7 +140,6 @@ function Product_Detai() {
                                 </Tooltip>
                             }
                         >
-                            {/* {children} */}
                         </Comment>)
                 )
                 review = (
@@ -179,7 +198,7 @@ function Product_Detai() {
                                 </table>
                             </div>
                             <Form.Item>
-                                <Button style={{ marginRight: '10px', marginBottom: '20px' }}>Thêm vào Giỏ hàng</Button>
+                                <Button style={{ marginRight: '10px', marginBottom: '20px' }} onClick={(e) => OnClick()}>Thêm vào Giỏ hàng</Button>
                                 <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }}>Mua</Button>
                             </Form.Item>
                         </div>
@@ -192,15 +211,8 @@ function Product_Detai() {
     return (
         <Layout>
             <Layout.Main>
-                {/* {console.log(review)} */}
-                {/* {console.log(product.product.name)} */}
-                {/* <div style={{height:'50%', float: 'top' }}> */}
-                    {content}
-                {/* </div> */}
-                {/* <div style={{float:'bottom'}}> */}
-                    {review}
-                {/* </div> */}
-
+                {content}
+                {review}
             </Layout.Main>
         </Layout>
     );

@@ -15,11 +15,7 @@ export default function Navbar() {
   let user = localStorage.getItem('user-info');
   const handleLogout = async () => {
     try {
-      // const response = await logout()
       localStorage.clear();
-      // if (response.request.status === 200) {
-      //   window.location = '/'
-      // }
       window.location.href = '/login';
     } catch (error) {
       if (error.request.status === 400) {
@@ -40,7 +36,7 @@ export default function Navbar() {
     </Menu>
   )
   let checkLogin
-  if (userInfo.name == null){
+  if (user == null){
     checkLogin = (
       <div>
         <a href="/Register" style={{padding:10}}> Đăng ký</a>
