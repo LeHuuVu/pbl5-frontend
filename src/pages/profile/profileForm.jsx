@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar } from 'antd'
+import { Avatar, Input, Button } from 'antd'
 import { EditFilled } from '@ant-design/icons'
 // import { ReactReduxContext } from 'react-redux'
 import { getProfile, getAvatar } from '../../api/profile'
@@ -10,9 +10,10 @@ const ProfileForm = () => {
   const [nameUser, setNameUser] = useState('')
   const [chatWorkIdUser, setChatWorkIdUser] = useState('')
   const [emailUser, setEmailUser] = useState('')
+  const [editable, setEditable] = useState(false)
 
   // const { store } = useContext(ReactReduxContext)
-
+  let info = JSON.parse(localStorage.getItem('user-info'));
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -31,26 +32,46 @@ const ProfileForm = () => {
     }
   }, [user])
 
+  const onClick = () => {
+    setEditable(true)
+  }
+
+  const onCancel = () => {
+    setEditable(false)
+  }  
+  const save = () => {
+    setEditable(false)
+  }
+
+
   return (
     <div style={{ margin: '0 26%' }}>
-      <div class="profile">
+      {console.log(info)}
+      <div className="profile">
         <figure>
-          <img src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/279228757_3155566138105769_5967045552796148415_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=a2NIO-0c_4IAX9hWRED&_nc_ht=scontent.fsgn2-5.fna&oh=00_AT8VuoV64t4vCuBe4UnCUB-IaKlUoNoSVT0cBClsajmmhg&oe=62999B16" alt="" />
+          <Avatar src={info.avatar} alt="" 
+                  className="profileAvatar" size={256}/>
         </figure>
         <header>
-          <h1>Vũ</h1>
+          <h1>Hồ sơ của bạn:</h1>
         </header>
         <main>
           <dl>
             <dt>Tên đầy đủ</dt>
-            <dd>Lê Hữu Vũ</dd>
+            <dd><Input readOnly={!editable} value={info.name}/></dd>
             <dt>SĐT</dt>
-            <dd>0964xxx732</dd>
+            <dd><Input readOnly={!editable} value={info.phone}/></dd>
             <dt>Email</dt>
-            <dd>lehuuvupro123@gmail.com</dd>
+            <dd><Input readOnly={!editable} value={info.email}/></dd>
             <dt>Địa chỉ</dt>
-            <dd>TT Ái Nghĩa, Đại Lộc, Quảng Nam</dd>
-            <dd><a href="">Edit ProFile</a></dd>
+            <dd><Input readOnly={!editable} value={info.address}/></dd>
+            <dd>{ editable ? 
+                <div>    
+                  <Button ghost={true} size={'large'} style={{backgroundColor: "#ff8e3c", width:"30%", color:"#0d0d0d"}} onClick={save}>Save</Button>
+                  <Button danger size={'large'} style={{width:"30%"}} onClick={onCancel} >Cancel</Button>
+                </div>
+              : <Button ghost={true} size={'large'} style={{backgroundColor: "#ff8e3c", width:"30%", color:"#0d0d0d"}} onClick={onClick} >Edit ProFile</Button> }  
+            </dd>
           </dl>
           </main>
       </div>
