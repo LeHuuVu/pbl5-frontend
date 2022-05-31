@@ -5,7 +5,7 @@ import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate } from
 import './index.css'
 import Layout from '../../layouts/Layout'
 import { useParams } from 'react-router';
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import {
@@ -14,54 +14,56 @@ import {
     LikeFilled,
     LikeOutlined,
 } from '@ant-design/icons';
-import {productDetail} from '../../api/buyerInterface';
+import { productDetail } from '../../api/buyerInterface';
 import moment from 'moment';
 
-function averageRate(list_review){
-    if(list_review!==undefined){    
-        if(list_review.length > 0){
+function averageRate(list_review) {
+    if (list_review !== undefined) {
+        if (list_review.length > 0) {
             let res = 0;
-            for (let i = 0; i < list_review.length ; i++) {
-                res+=list_review[i].review.star_rating;
+            for (let i = 0; i < list_review.length; i++) {
+                res += list_review[i].review.star_rating;
             }
-            return (res/list_review.length);}
+            return (res / list_review.length);
+        }
     }
     return 0;
 }
 function Product_Detai() {
-    if(localStorage['user-info']==null) {window.location.href = '/login'}
+    if (localStorage['user-info'] == null) { window.location.href = '/login' }
+
     const { id } = useParams();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
     // const [review, setReview] = useState([]);
     const [product, setProduct] = useState([]);
-    const [totalRate, setTotalRate] = useState(0);  
+    const [totalRate, setTotalRate] = useState(0);
 
     try {
         useEffect(async () => {
-            try{
+            try {
                 // await getReview({id_product : id}).then((res) => {
                 //     setReview((review)=>res.data);
                 // }).catch((error) => console.log(error.response.request.response))
-                await productDetail({id_product : id}).then((res) => {
-                    setProduct((product) => res.data);                
+                await productDetail({ id_product: id }).then((res) => {
+                    setProduct((product) => res.data);
                 }).catch((error) => console.log(error.response.request.response))
-            } catch(e){console.error(e)}
-            }, [])
+            } catch (e) { console.error(e) }
+        }, [])
     }
-    catch(e){console.error(e)}
+    catch (e) { console.error(e) }
     useEffect(() => {
-        try{
+        try {
             setTotalRate(averageRate(product.list_review))
-        } catch(e){console.error(e)}
-        }, [product])
+        } catch (e) { console.error(e) }
+    }, [product])
 
     const like = () => {
         setLikes(1);
         setDislikes(0);
         setAction('liked');
-    };    
+    };
 
 
     const dislike = () => {
@@ -87,16 +89,16 @@ function Product_Detai() {
         </Tooltip>,
         <span key="comment-basic-reply-to">Reply to</span>,
     ];
-    
+
     // console.log(totalRate);
     let comments;
     let review;
-    if(product!==null){
-        if(product.list_review!==undefined){
-            try{
+    if (product !== null) {
+        if (product.list_review !== undefined) {
+            try {
                 comments = (
-                    product.list_review.map((item) => 
-                        <Comment 
+                    product.list_review.map((item) =>
+                        <Comment
                             actions={actions}
                             author={
                                 <>
@@ -116,32 +118,32 @@ function Product_Detai() {
                                 <Tooltip title={moment(item.review.updated_at).format('YYYY-MM-DD HH:mm:ss')}>
                                     <span>{moment(item.review.updated_at).fromNow()}</span>
                                 </Tooltip>
-                            } 
-                            >
-                                {/* {children} */}
+                            }
+                        >
+                            {/* {children} */}
                         </Comment>)
                 )
                 review = (
-                    <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>                      
-                    <h2>Đánh giá</h2>
-                    {comments}
+                    <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
+                        <h2>Đánh giá</h2>
+                        {comments}
                     </div>
-                ) 
+                )
             }
-            catch(e) {console.error(e)}
+            catch (e) { console.error(e) }
         }
     }
-    let content;    
-    if(product!==null){
-        if(product.product!==undefined){
-            try{
+    let content;
+    if (product !== null) {
+        if (product.product !== undefined) {
+            try {
                 let final = totalRate;
-                if(final === 0){final = 'Chưa có đánh giá'}
+                if (final === 0) { final = 'Chưa có đánh giá' }
                 content = (
                     <div>
-                        <div style={{ width: '40%', float: 'left', textAlign: 'right' }}> 
+                        <div style={{ width: '40%', float: 'left', textAlign: 'right' }}>
                             <Image
-                                width={'65%'}
+                                width={'45%'}
                                 src={product.product.image}
                             />
                         </div>
@@ -157,8 +159,8 @@ function Product_Detai() {
                                         </th>
                                     </tr>
                                     <tr>
-                                    <th>Shop:</th>
-                                    <td>{product.company_name}</td>
+                                        <th>Shop:</th>
+                                        <td>{product.company_name}</td>
                                     </tr>
                                     <tr>
                                         <th>Mô tả:</th>
@@ -171,31 +173,34 @@ function Product_Detai() {
                                     <tr>
                                         <th>Số lượng:</th>
                                         <td>
-                                            <InputNumber defaultValue={1} size={10} style={{ marginRight: '10px' }} /> {product.product.amount_remaining} sản phẩm có sẵn
+                                            <InputNumber defaultValue={1} style={{ marginRight: '10px' }} /> {product.product.amount_remaining} sản phẩm có sẵn
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <Form.Item>
                                 <Button style={{ marginRight: '10px', marginBottom: '20px' }}>Thêm vào Giỏ hàng</Button>
-                                <Button type="primary">Mua</Button>
+                                <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }}>Mua</Button>
                             </Form.Item>
                         </div>
                     </div>
-                );}
-                catch(e) {console.error(e)}
+                );
             }
+            catch (e) { console.error(e) }
+        }
     }
     return (
         <Layout>
             <Layout.Main>
-        {/* {console.log(review)} */}
-        {/* {console.log(product.product.name)} */}
-                <div >
+                {/* {console.log(review)} */}
+                {/* {console.log(product.product.name)} */}
+                {/* <div style={{height:'50%', float: 'top' }}> */}
                     {content}
+                {/* </div> */}
+                {/* <div style={{float:'bottom'}}> */}
                     {review}
-                </div>
-            
+                {/* </div> */}
+
             </Layout.Main>
         </Layout>
     );
