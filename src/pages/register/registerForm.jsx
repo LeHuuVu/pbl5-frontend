@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable import/no-anonymous-default-export */
+import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import logo from '../../logo_app.png';
+import { useNavigate } from "react-router-dom";
+import {register} from '../../api/login';
 import {
     Form,
     Input,
@@ -9,15 +13,56 @@ import {
     Select,
     Switch,
     Checkbox,
-    Divider,
+    notification
 } from 'antd';
 
 const RegisterForm = () => {
+    const navigate = useNavigate();
     const [componentSize, setComponentSize] = useState('default');
-
+    const [seller, setSeller] = useState(false);
+    const [role, setRole] = useState(1);
+    const onFinish = async (values) => {
+        await register({
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
+            role: role,
+            address: values.address,
+            password: values.password,
+        }).then(res => openNotificationSuccess(res))
+          .catch((error) => {
+            if (error.request.status === 400) { 
+              notification.error({
+                  message: 'Email này đã được đăng ký!',
+                  duration: 3,
+                })
+            }
+          })
+      };  
+    const openNotificationSuccess = (res) => {
+        notification.success({
+          message: 'Chào mừng đến với E-Commerce!',
+          duration: 3,
+        })
+        localStorage.setItem("user-info", JSON.stringify(res.data));
+        //retrieve data 
+        // JSON.parse(localStorage.getItem('user-info'))
+        navigate("/productList");
+    }
     const onFormLayoutChange = ({ size }) => {
         setComponentSize(size);
     };
+    const onChange = (checked) => {
+        setSeller(checked)
+    };
+
+    useEffect(() => {
+        try {
+            if(seller === true){setRole(2)}
+            if(seller === false){setRole(1)}
+        } catch (e) { console.error(e) }
+    }, [seller])
+
     const { Option } = Select;
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -66,10 +111,23 @@ const RegisterForm = () => {
                                 size: componentSize,
                             }}
                             onValuesChange={onFormLayoutChange}
-                            size={componentSize}
+                            size={componentSize}                
+                            onFinish={onFinish}
                         >
                             <Form.Item label="Người bán:" valuePropName="checked">
-                                <Switch />
+                                <Switch checkedChildren="Người bán" unCheckedChildren="Người mua" onChange={onChange}/>
+                            </Form.Item>
+                            <Form.Item
+                                name="name"
+                                label="Họ và tên:"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Hãy cho chúng tôi biết tên của bạn',
+                                    },
+                                ]}
+                            >
+                                <Input/>
                             </Form.Item>
                             <Form.Item
                                 name="email"
@@ -95,7 +153,17 @@ const RegisterForm = () => {
                                     {
                                         required: true,
                                         message: 'Vui lòng nhập mật khẩu của bạn!',
+                                    }, 
+                                    { 
+                                        type: 'string', 
+                                        min: 8, 
+                                        message: 'Hãy đặt mật khẩu có nhiều hơn 8 kí tự',
                                     },
+                                    { 
+                                        type: 'string',
+                                        max: 24, 
+                                        message: 'Hãy đặt mật khẩu có ít hơn 24 kí tự',
+                                    }
                                 ]}
                                 hasFeedback
                             >
@@ -134,12 +202,31 @@ const RegisterForm = () => {
                                         required: true,
                                         message: 'Vui lòng nhập SĐT!',
                                     },
+                                    { 
+                                        type: 'string', 
+                                        min: 8, 
+                                        max: 10, 
+                                        message: 'Hãy nhập số điện thoại hợp lệ',
+                                    },
                                 ]}
                             >
                                 <Input
                                     addonBefore={prefixSelector}
                                 />
                             </Form.Item>
+                            <Form.Item
+                                name="address"
+                                label="Địa chỉ mặc định:"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng địa chỉ mặc định',
+                                    },
+                                ]}
+                            >
+                                <Input/>
+                            </Form.Item>
+                            
 
                             <Form.Item
                                 name="agreement"
