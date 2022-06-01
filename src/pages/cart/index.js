@@ -43,15 +43,17 @@ const Cart = () => {
   const userId = JSON.parse(localStorage.getItem('user-info')).id
 
   const [listorder, setOrder] = useState([]);
+  const [reload, setReload] = useState(false);
 
   try {
     useEffect(async () => {
-      try {
+      try { 
+      setReload(false)
         await orderList({ id_user: userId }).then((res) => {
           setOrder((order) => res.data);
         }).catch((error) => console.log(error.response.request.response))
       } catch (e) { console.error(e) }
-    }, [])
+    }, [reload])
   }
   catch (e) { console.error(e) }
 
@@ -68,7 +70,8 @@ const Cart = () => {
     })
   }
 
-  const openNotificationSuccess = (res) => {
+  const openNotificationSuccess = (res) => {   
+    setReload(true)
     notification.success({
       message: "Đã xóa!" ,
       duration: 3,
@@ -99,7 +102,7 @@ const Cart = () => {
               <div class="_25vezo" style={{ backgroundImage: "url('" + element.image + "')" }}></div>
             </a>
             <div class="_1WfuBi">
-              <a class="_3t5Sij" title={element.name} href={"/product_detal/" + element.pivot.product_id}>
+              <a class="_3t5Sij" title={element.name} href={"/product_detail/" + element.pivot.product_id}>
                 {element.name}
               </a>
 
