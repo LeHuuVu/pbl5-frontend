@@ -43,9 +43,9 @@ function Product_Detail() {
     const navigate = useNavigate();
 
     try {
-        useEffect(async () => {
+        useEffect( () => {
             try {
-                await productDetail({ id_product: id }).then((res) => {
+                productDetail({ id_product: id }).then((res) => {
                     setProduct((product) => res.data);
                 }).catch((error) => console.log(error.response.request.response))
             } catch (e) { console.error(e) }

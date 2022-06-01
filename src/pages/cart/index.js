@@ -46,10 +46,10 @@ const Cart = () => {
   const [reload, setReload] = useState(false);
 
   try {
-    useEffect(async () => {
+    useEffect( () => {
       try { 
       setReload(false)
-        await orderList({ id_user: userId }).then((res) => {
+        orderList({ id_user: userId }).then((res) => {
           setOrder((order) => res.data);
         }).catch((error) => console.log(error.response.request.response))
       } catch (e) { console.error(e) }
