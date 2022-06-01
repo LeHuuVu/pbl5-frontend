@@ -6,10 +6,6 @@ import { getProfile, getAvatar } from '../../api/profile'
 import './index.scss'
 
 const ProfileForm = () => {
-  const [avatarUser, setAvatarUser] = useState('')
-  const [nameUser, setNameUser] = useState('')
-  const [chatWorkIdUser, setChatWorkIdUser] = useState('')
-  const [emailUser, setEmailUser] = useState('')
   const [editable, setEditable] = useState(false)
 
   // const { store } = useContext(ReactReduxContext)
@@ -21,13 +17,8 @@ const ProfileForm = () => {
     if (user) {
       const id = user.get('id')
       getProfile(id).then((response) => {
-        setNameUser(response.data.name)
-        setChatWorkIdUser(response.data.chatwork_id)
-        setEmailUser(response.data.email)
       })
       getAvatar(id).then(() => {
-        const link = `api/avatar/${id}`
-        setAvatarUser(link)
       })
     }
   }, [user])
@@ -58,13 +49,51 @@ const ProfileForm = () => {
         <main>
           <dl>
             <dt>Tên đầy đủ</dt>
-            <dd><Input readOnly={!editable} value={info.name}/></dd>
+            <dd><Input readOnly={!editable} value={info.name}
+              rules={[
+                {
+                    required: true,
+                    message: 'Hãy cho chúng tôi biết tên của bạn',
+                },
+              ]}/>
+            </dd>
             <dt>SĐT</dt>
-            <dd><Input readOnly={!editable} value={info.phone}/></dd>
+            <dd><Input readOnly={!editable} value={info.phone}
+              rules={[
+                  {
+                      required: true,
+                      message: 'Vui lòng nhập SĐT!',
+                  },
+                  { 
+                      type: 'string', 
+                      min: 8, 
+                      max: 10, 
+                      message: 'Hãy nhập số điện thoại hợp lệ',
+                  },
+              ]}/>
+            </dd>
             <dt>Email</dt>
-            <dd><Input readOnly={!editable} value={info.email}/></dd>
+            <dd><Input readOnly={!editable} value={info.email}
+              rules={[
+                {
+                    type: 'email',
+                    message: 'E-mail không hợp lệ!',
+                },
+                {
+                    required: true,
+                    message: 'Vui lòng nhập E-mail của bạn!',
+                },
+                ]}/>
+            </dd>
             <dt>Địa chỉ</dt>
-            <dd><Input readOnly={!editable} value={info.address}/></dd>
+            <dd><Input readOnly={!editable} value={info.address}
+              rules={[
+                {
+                    required: true,
+                    message: 'Vui lòng địa chỉ mặc định',
+                },
+              ]}/>
+            </dd>
             <dd>{ editable ? 
                 <div>    
                   <Button ghost={true} size={'large'} style={{backgroundColor: "#ff8e3c", width:"30%", color:"#0d0d0d"}} onClick={save}>Save</Button>
