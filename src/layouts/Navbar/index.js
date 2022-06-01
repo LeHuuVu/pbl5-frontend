@@ -60,7 +60,7 @@ export default function Navbar() {
     <div className=" flex justify-between items-center border-2 navbar select-none">
       <div className="flex"  style={{float:'left'}}>
         <div className="w-20 ml-16">
-          <a href="/productList" >
+          <a href={JSON.parse(localStorage['user-info']).role!=2?"/productList":"/sellingProduct"} >
               <img src={logo} alt="logo" className="logo"/>
           </a>
         </div>
