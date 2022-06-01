@@ -6,7 +6,6 @@ import ProductList from '../pages/product_list';
 import Profile from '../pages/profile';
 import Cart from '../pages/cart';
 import ProductDetail from '../pages/product_detail';
-import ProductInfo from '../pages/product_info';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
@@ -23,7 +22,6 @@ class App extends Component {
           <Route path="/register" element={<Register/>}/>
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/product_detail/:id" element={<ProductDetail/>}/>
-          <Route path="/product_info" element={<ProductInfo/>}/>
           <Route path="/productList" element={<ProductList/>}/>
         </Routes>
       </Router>
