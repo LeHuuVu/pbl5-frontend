@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import logo from '../../logo_app.png';
 import { useNavigate } from "react-router-dom";
-import {register} from '../../api/login';
+import { register } from '../../api/login';
 import {
     Form,
     Input,
@@ -13,8 +13,11 @@ import {
     Select,
     Switch,
     Checkbox,
+    Upload,
     notification
 } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -30,19 +33,19 @@ const RegisterForm = () => {
             address: values.address,
             password: values.password,
         }).then(res => openNotificationSuccess(res))
-          .catch((error) => {
-            if (error.request.status === 400) { 
-              notification.error({
-                  message: 'Email này đã được đăng ký!',
-                  duration: 3,
-                })
-            }
-          })
-      };  
+            .catch((error) => {
+                if (error.request.status === 400) {
+                    notification.error({
+                        message: 'Email này đã được đăng ký!',
+                        duration: 3,
+                    })
+                }
+            })
+    };
     const openNotificationSuccess = (res) => {
         notification.success({
-          message: 'Chào mừng đến với E-Commerce!',
-          duration: 3,
+            message: 'Chào mừng đến với E-Commerce!',
+            duration: 3,
         })
         localStorage.setItem("user-info", JSON.stringify(res.data));
         //retrieve data 
@@ -58,8 +61,8 @@ const RegisterForm = () => {
 
     useEffect(() => {
         try {
-            if(seller === true){setRole(2)}
-            if(seller === false){setRole(1)}
+            if (seller === true) { setRole(2) }
+            if (seller === false) { setRole(1) }
         } catch (e) { console.error(e) }
     }, [seller])
 
@@ -81,6 +84,41 @@ const RegisterForm = () => {
             </Select>
         </Form.Item>
     );
+
+    
+    //-----use for upload image
+    const [fileList, setFileList] = useState([
+    //     {
+    //         uid: '-1',
+    //         name: 'image.png',
+    //         status: 'done',
+    //         url: '',
+            
+    //     },
+    ]);
+
+    const onChangeImg = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+    };
+
+    const onPreview = async (file) => {
+        let src = file.url;
+
+        if (!src) {
+            src = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj);
+
+                reader.onload = () => resolve(reader.result);
+            });
+        }
+
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow?.document.write(image.outerHTML);
+    };
+    //-------------------------------end
 
     return (
         <div>
@@ -111,11 +149,11 @@ const RegisterForm = () => {
                                 size: componentSize,
                             }}
                             onValuesChange={onFormLayoutChange}
-                            size={componentSize}                
+                            size={componentSize}
                             onFinish={onFinish}
                         >
                             <Form.Item label="Người bán:" valuePropName="checked">
-                                <Switch checkedChildren="Người bán" unCheckedChildren="Người mua" onChange={onChange}/>
+                                <Switch checkedChildren="Người bán" unCheckedChildren="Người mua" onChange={onChange} />
                             </Form.Item>
                             <Form.Item
                                 name="name"
@@ -127,7 +165,29 @@ const RegisterForm = () => {
                                     },
                                 ]}
                             >
-                                <Input/>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item label="Ảnh đại diện" name="photos">
+                                {/* <Upload
+                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    listType="picture"
+                                    maxCount={1}
+                                >
+                                    <Button icon={<UploadOutlined />}>Tải lên</Button>
+                                </Upload> */}
+                                <ImgCrop rotate>
+                                    <Upload
+                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        listType="picture-card"
+                                        fileList={fileList}
+                                        onChange={onChangeImg}
+                                        onPreview={onPreview}
+                                    >
+                                        {fileList.length < 1 && '+ Tải lên'}
+                                    </Upload>                                    
+                                    {/* {fileList.length == 1 && console.log(fileList[0])} */}
+                                    {/* {fileList.length == 1 && console.log(fileList[0].name)} */}
+                                </ImgCrop>
                             </Form.Item>
                             <Form.Item
                                 name="email"
@@ -153,15 +213,15 @@ const RegisterForm = () => {
                                     {
                                         required: true,
                                         message: 'Vui lòng nhập mật khẩu của bạn!',
-                                    }, 
-                                    { 
-                                        type: 'string', 
-                                        min: 8, 
+                                    },
+                                    {
+                                        type: 'string',
+                                        min: 8,
                                         message: 'Hãy đặt mật khẩu có nhiều hơn 8 kí tự',
                                     },
-                                    { 
+                                    {
                                         type: 'string',
-                                        max: 24, 
+                                        max: 24,
                                         message: 'Hãy đặt mật khẩu có ít hơn 24 kí tự',
                                     }
                                 ]}
@@ -202,10 +262,10 @@ const RegisterForm = () => {
                                         required: true,
                                         message: 'Vui lòng nhập SĐT!',
                                     },
-                                    { 
-                                        type: 'string', 
-                                        min: 8, 
-                                        max: 10, 
+                                    {
+                                        type: 'string',
+                                        min: 8,
+                                        max: 10,
                                         message: 'Hãy nhập số điện thoại hợp lệ',
                                     },
                                 ]}
@@ -224,9 +284,9 @@ const RegisterForm = () => {
                                     },
                                 ]}
                             >
-                                <Input/>
+                                <Input />
                             </Form.Item>
-                            
+
 
                             <Form.Item
                                 name="agreement"
@@ -249,7 +309,7 @@ const RegisterForm = () => {
                                     Đăng ký
                                 </Button>
                                 <Button type="primary" htmlType="exit" style={{ marginLeft: '20px' }}>
-                                    <a href='/login' style={{textDecoration:'none'}}>Hủy</a>
+                                    <a href='/login' style={{ textDecoration: 'none' }}>Hủy</a>
                                 </Button>
                             </Form.Item>
                         </Form>

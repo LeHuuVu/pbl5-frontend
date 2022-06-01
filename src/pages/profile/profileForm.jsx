@@ -49,7 +49,7 @@ const ProfileForm = () => {
         <main>
           <dl>
             <dt>Tên đầy đủ</dt>
-            <dd><Input readOnly={!editable} value={info.name}
+            <dd><Input readOnly={!editable} defaultValue={info.name} 
               rules={[
                 {
                     required: true,
@@ -58,7 +58,7 @@ const ProfileForm = () => {
               ]}/>
             </dd>
             <dt>SĐT</dt>
-            <dd><Input readOnly={!editable} value={info.phone}
+            <dd><Input readOnly={!editable} defaultValue={info.phone}
               rules={[
                   {
                       required: true,
@@ -73,7 +73,7 @@ const ProfileForm = () => {
               ]}/>
             </dd>
             <dt>Email</dt>
-            <dd><Input readOnly={!editable} value={info.email}
+            <dd><Input readOnly={!editable} defaultValue={info.email}
               rules={[
                 {
                     type: 'email',
@@ -86,7 +86,7 @@ const ProfileForm = () => {
                 ]}/>
             </dd>
             <dt>Địa chỉ</dt>
-            <dd><Input readOnly={!editable} value={info.address}
+            <dd><Input readOnly={!editable} defaultValue={info.address}
               rules={[
                 {
                     required: true,
