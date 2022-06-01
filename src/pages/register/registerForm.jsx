@@ -85,17 +85,18 @@ const RegisterForm = () => {
         </Form.Item>
     );
 
+    
+    //-----use for upload image
     const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
+    //     {
+    //         uid: '-1',
+    //         name: 'image.png',
+    //         status: 'done',
+    //         url: '',
+            
+    //     },
     ]);
 
-
-    //-----use for upload image
     const onChangeImg = ({ fileList: newFileList }) => {
         setFileList(newFileList);
     };
