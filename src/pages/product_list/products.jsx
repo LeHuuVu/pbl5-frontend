@@ -9,8 +9,8 @@ import {listProduct} from '../../api/buyerInterface';
 const ProductListForm = () => {
     const [list, setList] = useState([]);
 
-    useEffect(async () => {
-            await listProduct().then((res) => {
+    useEffect(() => {
+            listProduct().then((res) => {
                 setList((list)=>res.data);
             }).catch((error) => console.log(error.response.request.response))
     }, [])
