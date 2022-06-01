@@ -12,11 +12,7 @@ export default function Navbar() {
   let user = localStorage.getItem('user-info');
   const handleLogout = async () => {
     try {
-      // const response = await logout()
       localStorage.clear();
-      // if (response.request.status === 200) {
-      //   window.location = '/'
-      // }
       window.location.href = '/login';
     } catch (error) {
       if (error.request.status === 400) {
