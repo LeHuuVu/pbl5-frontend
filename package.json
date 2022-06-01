@@ -2,7 +2,6 @@
   "name": "pbl5-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://main.d24fwryy65lhro.amplifyapp.com/",
   "dependencies": {
     "@babel/preset-react": "^7.17.12",
     "@reduxjs/toolkit": "^1.8.2",
