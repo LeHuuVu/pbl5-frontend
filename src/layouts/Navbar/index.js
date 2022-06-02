@@ -70,8 +70,8 @@ export default function Navbar() {
     <div className=" flex justify-between items-center border-2 navbar select-none">
       <div className="flex" style={{ float: 'left' }}>
         <div className="w-20 ml-16">
-          <a href={role != 2 ? "/productList" : "/sellingProduct"} >
-          <img src={logo} alt="logo" className="logo" />
+          <a href={role != 2 ? "/productList" : "/sellingProduct"} style={{ textDecoration: 'none', fontSize: '25px' }}>
+            <img src={logo} alt="logo" className="logo" />!Ponzi
           </a>
         </div>
       </div>
@@ -83,9 +83,19 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex px-16 items-center cartNavbar" style={{ float: 'right' }}>
-        <div className="px-4">
+        {(role == 1) && (typeof localStorage['user-info'] != "undefined")
+          ?
+          <>
+            <div className="px-4">
+              <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%' }} />} />
+            </div>
+          </>
+          :
+          null
+        }
+        {/* <div className="px-4">
           <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%' }} />} />
-        </div>
+        </div> */}
       </div>
       {checkLogin}
     </div>

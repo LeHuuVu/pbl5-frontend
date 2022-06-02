@@ -16,7 +16,7 @@ const SellingProductListForm = () => {
             setList((list) => res.data);
         }).catch((error) => console.log(error.response.request.response))
     }, [])
-
+    console.log(list.length);
     let component;
     if (list !== null) {
         if (list !== undefined) {
@@ -24,9 +24,6 @@ const SellingProductListForm = () => {
                 list.map((item) => <SellingProduct item={item}></SellingProduct>)
             )
         }
-    }
-    else {
-        component = (<h1>fail</h1>)
     }
     return (
         <div>
@@ -41,14 +38,16 @@ const SellingProductListForm = () => {
                 </div>
             </div>
             <div className="latest-articles" style={{ margin: "0px 15%" }}>
-                {component ?
+                {(list.length>0) ?
                     component
                     :
-                    <><div style={{ width: '35%' }}>
-                    </div>
+                    <>
+                        <div style={{ width: '35%' }}>
+                        </div>
                         <div style={{ float: 'left', fontSize: '30px', marginTop: '25px' }}>
                             <p><b>Không có sản phẩm nào</b></p>
-                        </div></>
+                        </div>
+                    </>
                 }
             </div>
         </div>
