@@ -7,7 +7,9 @@ import Layout from '../../layouts/Layout'
 
 function ProductList() {
   
-  if(JSON.parse(localStorage['user-info']).role==2) {window.location.href = '/sellingProduct'}
+  if (typeof localStorage['user-info'] != 'undefined'){
+    if(JSON.parse(localStorage['user-info']).role==2) {window.location.href = '/sellingProduct'}
+  }
     return (      
     <Layout>
       <Layout.Main>

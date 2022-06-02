@@ -43,7 +43,7 @@ function Product_Detail() {
     const navigate = useNavigate();
 
     try {
-        useEffect( () => {
+        useEffect(() => {
             try {
                 productDetail({ id_product: id }).then((res) => {
                     setProduct((product) => res.data);
@@ -65,7 +65,7 @@ function Product_Detail() {
         }).catch((error) => {
             if (error.request.status === 400) {
                 notification.error({
-                    message: 'This product already exists in the cart',
+                    message: 'Sản phẩm đã tồn tại trong Giỏ hàng',
                     duration: 3,
                 })
             }
@@ -145,7 +145,15 @@ function Product_Detail() {
                 review = (
                     <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
                         <h2>Đánh giá</h2>
-                        {comments}
+                        {product.list_review.length > 0 ?
+                            comments
+                            :
+                            <div>
+                                <div style={{fontSize: '18px', marginTop: '15px' ,marginLeft:'15%'}}>
+                                    <p>Không có đánh giá</p>
+                                </div>
+                            </div>
+                        }
                     </div>
                 )
             }

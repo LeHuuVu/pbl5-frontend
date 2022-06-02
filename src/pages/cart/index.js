@@ -63,7 +63,7 @@ const Cart = () => {
     }).catch((error) => {
       if (error.request.status === 400) {
         notification.error({
-          message: 'Sorry!!! We are having some problems while processing!',
+          message: 'Xin lỗi!!! Chúng tôi đang gặp phải một số vấn đề!',
           duration: 3,
         })
       }
