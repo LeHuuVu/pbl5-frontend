@@ -10,7 +10,7 @@ const SellingProduct = (item) => (
                 hoverable
                 style={{ width: 240 , float:'left'}}
                 cover={<img alt="mainImage" src={item.item.image} />}
-                href="/product_detail"
+                href="/sellingProductDetail"
             >
                 <Rate allowHalf disabled defaultValue={2.5} />
                 <Meta title={item.item.name} description={item.item.price+" VND"} />
