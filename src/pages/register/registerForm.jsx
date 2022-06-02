@@ -6,6 +6,7 @@ import './index.css';
 import logo from '../../logo_app.png';
 import { useNavigate } from "react-router-dom";
 import { register } from '../../api/login';
+import axios from '../../api/axios';
 import {
     Form,
     Input,
@@ -14,33 +15,66 @@ import {
     Switch,
     Checkbox,
     Upload,
-    notification
+    notification,
+    message
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
+
+const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
 const RegisterForm = () => {
     const navigate = useNavigate();
     const [componentSize, setComponentSize] = useState('default');
+    const [loading, setLoading] = useState(false);
     const [seller, setSeller] = useState(false);
+    const [isImg, setISImg] = useState(true);
     const [role, setRole] = useState(1);
-    const onFinish = async (values) => {
-        await register({
-            name: values.name,
-            email: values.email,
-            phone: values.phone,
-            role: role,
-            address: values.address,
-            password: values.password,
-        }).then(res => openNotificationSuccess(res))
-            .catch((error) => {
-                if (error.request.status === 400) {
-                    notification.error({
-                        message: 'Email này đã được đăng ký!',
-                        duration: 3,
-                    })
-                }
-            })
+    const [img, setImg] = useState();
+    const onFinish = (values) => {
+        if(img === undefined) {
+            register({
+                name: values.name,
+                email: values.email,
+                phone: values.phone,
+                role: role,
+                address: values.address,
+                password: values.password,
+            }).then(res => openNotificationSuccess(res))
+                .catch((error) => {
+                    if (error.request.status === 400) {
+                        notification.error({
+                            message: 'Email này đã được đăng ký!',
+                            duration: 3,
+                        })
+                    }
+                })
+        }
+        else{
+            const formData = new FormData()
+            formData.append('email', values.email)
+            formData.append('name', values.name)
+            formData.append('phone', values.phone)
+            formData.append('role', role)
+            formData.append('avatar', img.originFileObj)
+            formData.append('address', values.address)
+            formData.append('password', values.password)
+            axios.post('/v2/register',formData).then(res => openNotificationSuccess(res))
+                .catch((error) => {
+                    console.log(error)
+                    if (error.request.status === 400) {
+                        notification.error({
+                            message: 'Email này đã được đăng ký!',
+                            duration: 3,
+                        })
+                    }
+                })
+        }
+
     };
     const openNotificationSuccess = (res) => {
         notification.success({
@@ -85,39 +119,72 @@ const RegisterForm = () => {
         </Form.Item>
     );
 
-    
-    //-----use for upload image
-    const [fileList, setFileList] = useState([
-    //     {
-    //         uid: '-1',
-    //         name: 'image.png',
-    //         status: 'done',
-    //         url: '',
-            
-    //     },
-    ]);
-
-    const onChangeImg = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
+    const onChangeImg = (response) => {
+        try{
+            if (response.file.status !== 'uploading') {
+                setLoading(true)
+            }
+            if (response.file.status === 'done') {
+                setImg(response.file);
+            } else if (response.file.status === 'error') {
+                message.error(`${response.file.name} 
+                                file upload failed.`);
+            }
+            setLoading(false)
+        }catch(e){console.log(e)}
+    };
+    const removeImg = () => {
+        try{
+            setImg(undefined);
+        }catch(e){console.log(e)}
     };
 
     const onPreview = async (file) => {
-        let src = file.url;
+        if(isImg){
+            let src = file.url;
 
-        if (!src) {
-            src = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj);
+            if (!src) {
+                src = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file.originFileObj);
 
-                reader.onload = () => resolve(reader.result);
-            });
+                    reader.onload = () => resolve(reader.result);
+                });
+            }
+
+            const image = new Image();
+            image.src = src;
+            const imgWindow = window.open(src);
+            imgWindow?.document.write(image.outerHTML);
         }
-
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
     };
+    const beforeUpload = (file) => {
+        const isJpgOrPng = (file.type === 'image/jpeg' || file.type === 'image/png'|| file.type === 'image/jpg'|| file.type === 'image/svg'|| file.type === 'image/gif');
+      
+        if (!isJpgOrPng) {
+          message.error('Bạn chỉ có thể tải lên file có định dạng JPG/PNG/JPG/SVG!');
+        }
+      
+        const isLt2M = (file.size / 1024 / 1024 < 2);
+      
+        if (!isLt2M) {
+          message.error('Ảnh có dung lượng quá lớn!');
+        }
+        setISImg(isJpgOrPng && isLt2M);
+        return isJpgOrPng && isLt2M;
+      };
+    const uploadButton = (
+        <div>
+          {loading ? <LoadingOutlined /> : <PlusOutlined />}
+          <div
+            style={{
+              marginTop: 8,
+            }}
+          >
+            Tải lên
+          </div>
+        </div>
+      );
     //-------------------------------end
 
     return (
@@ -167,26 +234,21 @@ const RegisterForm = () => {
                             >
                                 <Input />
                             </Form.Item>
-                            <Form.Item label="Ảnh đại diện" name="photos">
-                                {/* <Upload
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                    listType="picture"
-                                    maxCount={1}
-                                >
-                                    <Button icon={<UploadOutlined />}>Tải lên</Button>
-                                </Upload> */}
+                            <Form.Item label="Ảnh đại diện" name="photo" >
                                 <ImgCrop rotate>
                                     <Upload
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        customRequest={dummyRequest}
                                         listType="picture-card"
-                                        fileList={fileList}
-                                        onChange={onChangeImg}
+                                        onChange={(response)=>onChangeImg(response)}
+                                        accept=".png,.jpeg,.jpg,.gif,.svg"
+                                        beforeUpload={beforeUpload}
                                         onPreview={onPreview}
+                                        maxCount={1}
+                                        onRemove={removeImg}
                                     >
-                                        {fileList.length < 1 && '+ Tải lên'}
-                                    </Upload>                                    
-                                    {/* {fileList.length == 1 && console.log(fileList[0])} */}
-                                    {/* {fileList.length == 1 && console.log(fileList[0].name)} */}
+                                        {uploadButton}
+                                    </Upload>
+                                    {/* <input type="file" onChange={(e)=>{console.log(e.target.files[0])}} /> */}
                                 </ImgCrop>
                             </Form.Item>
                             <Form.Item

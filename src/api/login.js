@@ -3,3 +3,5 @@ import instance from './axios'
 export const login = async (argument) => instance.post('/v1/login', argument)
 
 export const register = async (argument) => instance.post('/v1/register',argument)
+
+export const registerV2 = async (argument) => instance.post('/v2/register', argument)

@@ -7,15 +7,16 @@ import './style.scss';
 import logo from '../../logo_app.png';
 
 export default function Navbar() {
+  let info = JSON.parse(localStorage.getItem('user-info'));
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
   let user = localStorage.getItem('user-info');
   let role = 1
   if (typeof localStorage['user-info'] != "undefined") {
-    if (JSON.parse(localStorage['user-info']).role == 2) {
+    if (JSON.parse(localStorage['user-info']).role === 2) {
       role = 2
     }
-    if (JSON.parse(localStorage['user-info']).role == 0) {
+    if (JSON.parse(localStorage['user-info']).role === 0) {
       role = 0
     }
   }
@@ -58,7 +59,7 @@ export default function Navbar() {
         <div className="px-4">
           <Dropdown overlay={userInformation} trigger={['click']}>
             <div className="avatarNavbar">
-              <Avatar className="" style={{ float: 'right', width: '40px', height: '40px' }} />
+              <Avatar src={info.avatar} className="" style={{ float: 'right', width: '40px', height: '40px' }} />
             </div>
           </Dropdown>
         </div>
@@ -70,7 +71,7 @@ export default function Navbar() {
     <div className=" flex justify-between items-center border-2 navbar select-none">
       <div className="flex" style={{ float: 'left' }}>
         <div className="w-20 ml-16">
-          <a href={role != 2 ? "/productList" : "/sellingProduct"} >
+          <a href={role !== 2 ? "/productList" : "/sellingProduct"} >
           <img src={logo} alt="logo" className="logo" />
           </a>
         </div>
