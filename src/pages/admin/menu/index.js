@@ -4,8 +4,6 @@ import "./index.css";
 import 'antd/dist/antd.min.css';
 import Layout from '../../../layouts/Layout'
 import { Button } from 'antd';
-import AllProduct from '../allProduct';
-import UserList from '../userList';
 
 function MenuAdmin() {
 
