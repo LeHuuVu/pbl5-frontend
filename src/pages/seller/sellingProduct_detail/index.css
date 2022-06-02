@@ -1,0 +1,14 @@
+td{
+    padding: 10px 8px;
+    text-align: justify;
+    width: 1000px;
+  }
+  th {
+    width: 100px;
+    text-align: left;
+    padding: 10px 5px;
+    font-size: 15px;
+  }
+  table{
+    margin-bottom: 20px;
+  }
