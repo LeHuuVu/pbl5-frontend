@@ -5,3 +5,5 @@ export const listProduct = async () => instance.get('/v1/getAllProduct')
 export const productDetail = async (argument) => instance.post('/v1/getDetailProduct', argument)
 //get review
 export const getReview = async (argument) => instance.post('/v1/getReviewProduct',argument)
+//payment
+export const payment = async (argument) => instance.post('/v2/order',argument)
