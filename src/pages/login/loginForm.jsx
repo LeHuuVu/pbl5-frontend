@@ -1,17 +1,20 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import './style.css';
 import { Form, Input, Button, Checkbox,notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import logo from '../../logo_app.png';
 import {login} from '../../api/login';
 
 function LoginForm() {
+  const [cookies, setCookie] = useCookies(["userInfo"]);  
   const navigate = useNavigate();
+  const [maxAge, setAge] = useState(86400);
   const onFinish = async (values) => {
     await login({
       email: values.email,
@@ -28,15 +31,24 @@ function LoginForm() {
       })
   };
   const openNotificationSuccess = (res) => {
-    localStorage.setItem("user-info", JSON.stringify(res.data));
+    // localStorage.setItem("user-info", JSON.stringify(res.data));
+    setCookie("userInfo", JSON.stringify(res.data),
+    {
+      path: "/",
+      maxAge: maxAge,
+    });
     notification.success({
       message: 'Chào mừng bạn quay lại, '+res.data.name+"!",
       duration: 3,
     })
     //retrieve data 
     // JSON.parse(localStorage.getItem('user-info'))
-    navigate("/productList");
+    if(cookies.userInfo.role!==2){navigate("/productList");}
   }
+  const remember = (e) => {
+    if(e.target.checked){setAge(90*86400)}
+    else(setAge(86400))
+  };
   return (
     <div>
       <title>E-Commerce Đăng nhập hoặc Đăng ký</title>
@@ -86,7 +98,7 @@ function LoginForm() {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Ghi nhớ đăng nhập</Checkbox>
+                <Checkbox onChange={remember}>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
 
               <a className="login-form-forgot" href="">

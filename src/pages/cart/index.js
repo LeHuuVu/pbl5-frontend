@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import Layout from '../../layouts/Layout'
-import { Table, Form, Button, InputNumber,notification } from 'antd';
+import { Table, Button, InputNumber,notification } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { deleteProdFromCart, orderList } from '../../api/cart';
 import {useNavigate} from 'react-router-dom'
+import { useCookies } from "react-cookie";
 
 
 const columns = [
@@ -35,27 +36,26 @@ const columns = [
 let s = 0;
 
 const Cart = () => {
-
-  if (localStorage['user-info'] == null) { window.location.href = '/login' }
+  
+  const [cookies] = useCookies(["userInfo"]);  
 
   const navigate = useNavigate();
 
-  const userId = JSON.parse(localStorage.getItem('user-info')).id
+  if (cookies.userInfo.role == null) { navigate('/login') }
 
-  const [listorder, setOrder] = useState([]);
+  const userId = cookies.userInfo.id
+
+  const [listOrder, setOrder] = useState([]);
   const [reload, setReload] = useState(false);
 
-  try {
-    useEffect( () => {
-      try { 
-      setReload(false)
-        orderList({ id_user: userId }).then((res) => {
-          setOrder((order) => res.data);
-        }).catch((error) => console.log(error.response.request.response))
-      } catch (e) { console.error(e) }
-    }, [reload])
-  }
-  catch (e) { console.error(e) }
+  useEffect( () => {
+    try { 
+    setReload(false)
+      orderList({ id_user: userId }).then((res) => {
+        setOrder((order) => res.data);
+      }).catch((error) => console.log(error))
+    } catch (e) { console.error(e) }
+  }, [reload])
 
   const OnDelete = async (idProd) => {
     await deleteProdFromCart({ id_user: userId, id_product: idProd }).then((res) => {
@@ -84,7 +84,7 @@ const Cart = () => {
 
   let tmpData = 0
   let tmpDataForm = 0
-  listorder.forEach(element => {
+  if(listOrder.length > 0) {listOrder.forEach(element => {
     console.log(element)
     data.push({
       key: tmpData++,
@@ -114,7 +114,7 @@ const Cart = () => {
       total: <div style={{ color: 'red' }}>₫{element.price * 1}</div>,
       bt: <Button onClick={(e) => OnDelete(element.id)} style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }} >Xóa</Button>
     })
-  });
+  });}
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 

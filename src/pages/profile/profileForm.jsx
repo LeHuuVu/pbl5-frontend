@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Avatar, Input, Button } from 'antd'
-import { EditFilled } from '@ant-design/icons'
+// import { EditFilled } from '@ant-design/icons'
 // import { ReactReduxContext } from 'react-redux'
 import { getProfile, getAvatar } from '../../api/profile'
+import { useCookies } from "react-cookie";
 import './index.scss'
 
 const ProfileForm = () => {
+  const [cookies] = useCookies(["userInfo"]);
   const [editable, setEditable] = useState(false)
 
   // const { store } = useContext(ReactReduxContext)
-  let info = JSON.parse(localStorage.getItem('user-info'));
+  let info = cookies.userInfo
   const [user, setUser] = useState(null)
 
   useEffect(() => {

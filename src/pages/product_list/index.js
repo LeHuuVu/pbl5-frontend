@@ -4,13 +4,14 @@ import "./index.css";
 import ProductListForm from './products';
 import 'antd/dist/antd.min.css';
 import Layout from '../../layouts/Layout'
+import { useCookies } from "react-cookie";
 
 function ProductList() {
-  
-  if (typeof localStorage['user-info'] != 'undefined'){
-    if(JSON.parse(localStorage['user-info']).role==2) {window.location.href = '/sellingProduct'}
-    if(JSON.parse(localStorage['user-info']).role==0) {window.location.href = '/admin'}
-  }
+  const [cookies] = useCookies(["userInfo"]);
+  // if(JSON.parse(localStorage['user-info']).role==2) {window.location.href = '/sellingProduct'}
+  // if(cookies.userInfo.role===0) {window.location.href = '/admin'}
+  if (cookies.userInfo.role===2){window.location.href = '/sellingProduct'}
+  else{
     return (      
     <Layout>
       <Layout.Main>
@@ -20,5 +21,6 @@ function ProductList() {
       </Layout.Main>
     </Layout>
       )
+  }
 }
 export default ProductList

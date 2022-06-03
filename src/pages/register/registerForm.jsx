@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import logo from '../../logo_app.png';
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { register } from '../../api/login';
 import axios from '../../api/axios';
 import {
@@ -28,6 +29,7 @@ const dummyRequest = ({ file, onSuccess }) => {
   };
 
 const RegisterForm = () => {
+    const [cookies, setCookie] = useCookies(["userInfo"]);  
     const navigate = useNavigate();
     const [componentSize, setComponentSize] = useState('default');
     const [loading, setLoading] = useState(false);
@@ -68,7 +70,7 @@ const RegisterForm = () => {
                     console.log(error)
                     if (error.request.status === 400) {
                         notification.error({
-                            message: 'Email này đã được đăng ký!',
+                            message: 'Email hpặc số điện thoại này đã được đăng ký!',
                             duration: 3,
                         })
                     }
@@ -78,13 +80,18 @@ const RegisterForm = () => {
     };
     const openNotificationSuccess = (res) => {
         notification.success({
-            message: 'Chào mừng đến với E-Commerce!',
+            message: 'Chào mừng'+res.data.name+' đến với E-Commerce!',
             duration: 3,
         })
-        localStorage.setItem("user-info", JSON.stringify(res.data));
+        setCookie("userInfo", JSON.stringify(res.data),
+        {
+          path: "/",
+          maxAge: 43200,
+        });
+        // localStorage.setItem("user-info", JSON.stringify(res.data));
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
-        navigate("/productList");
+        if(cookies.userInfo.role!==2){navigate("/productList");}
     }
     const onFormLayoutChange = ({ size }) => {
         setComponentSize(size);

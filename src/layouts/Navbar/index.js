@@ -4,31 +4,33 @@ import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import './style.scss';
+import { useCookies} from "react-cookie"
 import logo from '../../logo_app.png';
 
 export default function Navbar() {
-  let info = JSON.parse(localStorage.getItem('user-info'));
+  const [cookies, removeCookie] = useCookies(["userInfo"]); 
+  // let info = JSON.parse(localStorage.getItem('user-info'));
+  let info = cookies.userInfo;
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
-  let user = localStorage.getItem('user-info');
+  // let user = localStorage.getItem('user-info');
   let role = 1
-  if (typeof localStorage['user-info'] != "undefined") {
-    if (JSON.parse(localStorage['user-info']).role === 2) {
-      role = 2
-    }
-    if (JSON.parse(localStorage['user-info']).role === 0) {
-      role = 0
-    }
-  }
+  // if (typeof localStorage['user-info'] != "undefined") {
+  //   if (JSON.parse(localStorage['user-info']).role === 2) {
+  //     role = 2
+  //   }
+  //   if (JSON.parse(localStorage['user-info']).role === 0) {
+  //     role = 0
+  //   }
+  // }
 
   const handleLogout = async () => {
     try {
       localStorage.clear();
+      removeCookie('userInfo');
       window.location.href = '/login';
     } catch (error) {
-      if (error.request.status === 400) {
         console.log(error)
-      }
     }
   }
   const userInformation = (
@@ -44,7 +46,7 @@ export default function Navbar() {
     </Menu>
   )
   let checkLogin
-  if (user == null) {
+  if (info.role == null) {
     checkLogin = (
       <div>
         <a href="/Register" style={{ padding: 10 }}> Đăng ký</a>
@@ -54,6 +56,7 @@ export default function Navbar() {
     )
   }
   else {
+    role = info.role
     checkLogin = (
       <div className="flex items-center">
         <div className="px-4">

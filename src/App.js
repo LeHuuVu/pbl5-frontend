@@ -1,4 +1,5 @@
 import Routers from './route/route';
+import { withCookies } from 'react-cookie';
 
 function App() {
   return (
@@ -6,4 +7,4 @@ function App() {
   );
 }
 
-export default App;
+export default withCookies(App);
