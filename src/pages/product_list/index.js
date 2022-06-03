@@ -9,6 +9,7 @@ function ProductList() {
   
   if (typeof localStorage['user-info'] != 'undefined'){
     if(JSON.parse(localStorage['user-info']).role==2) {window.location.href = '/sellingProduct'}
+    if(JSON.parse(localStorage['user-info']).role==0) {window.location.href = '/admin'}
   }
     return (      
     <Layout>
