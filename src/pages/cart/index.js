@@ -10,6 +10,7 @@ import { payment } from '../../api/buyerInterface';
 import { useNavigate } from 'react-router-dom'
 
 const dateFormat = 'DD/MM/YYYY';
+import { useCookies } from "react-cookie";
 
 
 const columns = [
@@ -38,27 +39,27 @@ const columns = [
 let s = 0;
 
 const Cart = () => {
-
-  if (localStorage['user-info'] == null) { window.location.href = '/login' }
+  
+  const [cookies] = useCookies(["userInfo"]);  
 
   const navigate = useNavigate();
 
-  const userId = JSON.parse(localStorage.getItem('user-info')).id
+  if (cookies.userInfo.role == null) { navigate('/login') }
 
-  const [listorder, setOrder] = useState([]);
+  const userId = cookies.userInfo.id
+
+  const [listOrder, setOrder] = useState([]);
   const [reload, setReload] = useState(false);
 
-  try {
-    useEffect(() => {
-      try {
-        setReload(false)
-        orderList({ id_user: userId }).then((res) => {
-          setOrder((order) => res.data);
-        }).catch((error) => console.log(error.response.request.response))
-      } catch (e) { console.error(e) }
-    }, [reload])
-  }
-  catch (e) { console.error(e) }
+
+  useEffect( () => {
+    try { 
+    setReload(false)
+      orderList({ id_user: userId }).then((res) => {
+        setOrder((order) => res.data);
+      }).catch((error) => console.log(error))
+    } catch (e) { console.error(e) }
+  }, [reload])
 
   const OnDelete = async (idProd) => {
     await deleteProdFromCart({ id_user: userId, id_product: idProd }).then((res) => {
@@ -112,7 +113,7 @@ const Cart = () => {
                 </a>
 
               </div>
-            </div>
+            </div>0
           </div>,
         price: <>₫{element.price}</>,
         amount:
@@ -160,8 +161,6 @@ const Cart = () => {
     // console.log("...\n")
     // console.log(data)
   }
-
-
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 

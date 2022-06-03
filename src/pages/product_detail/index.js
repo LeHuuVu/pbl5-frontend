@@ -18,6 +18,7 @@ import { productDetail } from '../../api/buyerInterface';
 import moment from 'moment';
 import { addProdToCart } from '../../api/cart';
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function averageRate(list_review) {
     if (list_review !== undefined) {
@@ -32,8 +33,8 @@ function averageRate(list_review) {
     return 0;
 }
 function Product_Detail() {
-    if (localStorage['user-info'] == null) { window.location.href = '/login' }
-
+    // if (localStorage['user-info'] == null) { window.location.href = '/login' }  
+    const [cookies] = useCookies(["userInfo"]); 
     const { id } = useParams();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -58,18 +59,26 @@ function Product_Detail() {
         } catch (e) { console.error(e) }
     }, [product])
 
-    const userId = JSON.parse(localStorage.getItem('user-info')).id
+    const userId = cookies.userInfo.id
     const OnClick = async () => {
-        await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
+        if(cookies.userInfo.id!=null){
+            await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
             openNotificationSuccess(res)
         }).catch((error) => {
             if (error.request.status === 400) {
                 notification.error({
-                    message: 'Sản phẩm đã tồn tại trong Giỏ hàng',
+                    message: 'Sản phẩm đã có trong Giỏ hàng',
                     duration: 3,
                 })
             }
-        })
+        })}
+        else{
+            notification.info({
+                message: "Hãy đăng nhập để có thể mua mặt hàng này",
+                duration: 3,
+            })
+            navigate("/login");
+        }
     }
 
     const openNotificationSuccess = (res) => {
@@ -216,14 +225,23 @@ function Product_Detail() {
             catch (e) { console.error(e) }
         }
     }
-    return (
-        <Layout>
-            <Layout.Main>
-                {content}
-                {review}
-            </Layout.Main>
-        </Layout>
-    );
+    if (cookies.userInfo.role===2){            
+        notification.info({
+            message: "Hãy đăng nhập tài khoản mua hàng để có thể mua mặt hàng này ",
+            duration: 3,
+        })
+    navigate("/sellingProduct");
+    }
+    else{
+        return (
+            <Layout>
+                <Layout.Main>
+                    {content}
+                    {review}
+                </Layout.Main>
+            </Layout>
+        );
+    }
 }
 
 export default Product_Detail;
