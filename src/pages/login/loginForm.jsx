@@ -32,6 +32,7 @@ function LoginForm() {
   };
   const openNotificationSuccess = (res) => {
     // localStorage.setItem("user-info", JSON.stringify(res.data));
+    localStorage.setItem("age", maxAge);
     setCookie("userInfo", JSON.stringify(res.data),
     {
       path: "/",

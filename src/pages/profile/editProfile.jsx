@@ -39,7 +39,7 @@ const ProfileForm = (props) => {
                 }
             })
     }
-    else(openNotification())
+    else(setMode())
   }
     const openNotificationSuccess = (res) => {
         notification.success({
@@ -49,10 +49,8 @@ const ProfileForm = (props) => {
         setCookie("userInfo", JSON.stringify(res.data),
         {
         path: "/",
+        maxAge: localStorage.getItem('age')
         });
-        setMode()
-    }
-    const openNotification = () => {
         setMode()
     }
     //image handle

@@ -88,6 +88,7 @@ const RegisterForm = () => {
           path: "/",
           maxAge: 43200,
         });
+        localStorage.setItem("age", 43200);
         // localStorage.setItem("user-info", JSON.stringify(res.data));
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
