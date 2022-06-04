@@ -75,7 +75,7 @@ export default function Navbar() {
       <div className="flex" style={{ float: 'left' }}>
         <div className="w-20 ml-16">
           <a href={role !== 2 ? "/productList" : "/sellingProduct"} style={{ textDecoration: 'none', fontSize: '25px' }}>
-            <img src={logo} alt="logo" className="logo" />!Ponzi
+            <img src={logo} alt="logo" className="logo" />
           </a>
         </div>
       </div>
