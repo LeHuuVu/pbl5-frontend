@@ -3,21 +3,16 @@ import React from 'react';
 import "./index.css";
 import SellingProductListForm from './sellingProducts';
 import 'antd/dist/antd.min.css';
-import Layout from '../../../layouts/Layout'
 
 function ProductList() {
   if (localStorage['user-info'] == null) { window.location.href = '/login' }
   
   if(JSON.parse(localStorage['user-info']).role!=2) {window.location.href = '/productList'}
 
-    return (      
-    <Layout>
-      <Layout.Main>
+    return (
         <div>
           <SellingProductListForm />
-        </div>  
-      </Layout.Main>
-    </Layout>
+        </div>
       )
 }
 export default ProductList
