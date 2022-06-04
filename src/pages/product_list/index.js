@@ -3,7 +3,6 @@ import React from 'react';
 import "./index.css";
 import ProductListForm from './products';
 import 'antd/dist/antd.min.css';
-import Layout from '../../layouts/Layout'
 import { useCookies } from "react-cookie";
 
 function ProductList() {
@@ -12,14 +11,10 @@ function ProductList() {
   // if(cookies.userInfo.role===0) {window.location.href = '/admin'}
   if (cookies.userInfo.role===2){window.location.href = '/sellingProduct'}
   else{
-    return (      
-    <Layout>
-      <Layout.Main>
+    return (
         <div>
           <ProductListForm />
-        </div>  
-      </Layout.Main>
-    </Layout>
+        </div>
       )
   }
 }

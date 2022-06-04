@@ -2,7 +2,6 @@ import { useParams } from 'react-router';
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import Layout from '../../layouts/Layout'
 import { Table, Form, Button, InputNumber, Input, DatePicker, notification } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { deleteProdFromCart, orderList } from '../../api/cart';
@@ -64,7 +63,9 @@ const Cart = () => {
   useEffect( () => {
     try { 
     setReload(false)
-      orderList({ id_user: userId }).then((res) => {
+      orderList({ 
+        id_user: userId 
+      }).then((res) => {
         setOrder((order) => res.data);
       }).catch((error) => console.log(error))
     } catch (e) { console.error(e) }
@@ -266,8 +267,7 @@ const Cart = () => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-  return <Layout>
-    <Layout.Main>
+  return (
       <div>
         <div style={{ marginLeft: '15%', fontSize: '35px', marginBottom: '25px', display: 'flex' }}>
           <div className="px-4">
@@ -382,8 +382,7 @@ const Cart = () => {
           : null
         }
       </div>
-    </Layout.Main>
-  </Layout>;
+  );
 }
 
 export default Cart;

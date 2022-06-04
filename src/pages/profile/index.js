@@ -3,7 +3,6 @@ import React from 'react';
 // import "./index.css";
 import ProfileForm from './profileForm';
 import 'antd/dist/antd.min.css';
-import Layout from '../../layouts/Layout';
 import { useCookies } from "react-cookie";
 
 function Profile() {
@@ -11,14 +10,10 @@ function Profile() {
   
   if(cookies.userInfo.role==null) {window.location.href = '/login'}
   else{
-    return (      
-    <Layout>
-      <Layout.Main>
+    return (
         <div>
           <ProfileForm />
-        </div>  
-      </Layout.Main>
-    </Layout>
+        </div>
       )
   }
 }

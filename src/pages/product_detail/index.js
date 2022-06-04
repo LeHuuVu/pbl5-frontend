@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification } from 'antd';
 import './index.css'
-import Layout from '../../layouts/Layout'
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
@@ -234,12 +233,10 @@ function Product_Detail() {
     }
     else{
         return (
-            <Layout>
-                <Layout.Main>
-                    {content}
-                    {review}
-                </Layout.Main>
-            </Layout>
+            <div>
+                {content}
+                {review}
+            </div>
         );
     }
 }
