@@ -22,36 +22,48 @@ const ProfileForm = (props) => {
   // const { store } = useContext(ReactReduxContext)
   let info = cookies.userInfo
   const save = (values) => {
-    if((values.name!==info.name)&&(values.phone!==info.phone)&&(values.address!==info.address)&&(img !== undefined)){
-        const formData = new FormData()
-        formData.append('name', values.name)
-        formData.append('phone', values.phone)
-        formData.append('avatar', img.originFileObj)
-        formData.append('address', values.address)
-        axios.post('/v1/editProfile',formData).then(res => openNotificationSuccess(res))
-            .catch((error) => {
-                console.log(error)
-                if (error.request.status === 400) {
-                    notification.error({
-                        message: 'Đã xuất hiện Lỗi!',
-                        duration: 3,
-                    })
-                }
-            })
+    const formData = new FormData()
+    formData.append('id_user', info.id)
+    let change = false
+    if(values.name!==undefined){
+      formData.append('name', values.name)
+      change = true
     }
-    else(setMode())
+    if(values.phone!==undefined){
+      formData.append('phone', values.phone)
+      change = true
+    }
+    if(values.address!==undefined){
+      formData.append('address', values.address)
+      change = true
+    }
+    if(img !== undefined){
+        formData.append('avatar', img.originFileObj)
+        change = true
+    }
+    if(change){
+      axios.post('/v1/editProfile',formData).then(res => openNotificationSuccess(res))
+        .catch((error) => {
+            console.log(error)
+            notification.error({
+                message: 'Đã xuất hiện Lỗi!',
+                duration: 3,
+            })
+        })}
+    else{setMode()}
   }
     const openNotificationSuccess = (res) => {
         notification.success({
             message: 'Thay đổi thành công!',
             duration: 3,
         })
+        console.log(res)
         setCookie("userInfo", JSON.stringify(res.data),
         {
-        path: "/",
-        maxAge: localStorage.getItem('age')
+          path: "/",
+          maxAge: localStorage.getItem('age')
         });
-        setMode()
+        setMode()   
     }
     //image handle
     const onChangeImg = (response) => {
@@ -152,47 +164,25 @@ const ProfileForm = (props) => {
         <Form {...formItemLayout} style={{width: '550px'}} onFinish={save}>
           <Form.Item 
             label="Tên đầy đủ"
-            rules={[
-              {
-                  required: true,
-                  message: 'Hãy cho chúng tôi biết tên của bạn',
-              },
-            ]}>
+            name="name">
             <Input defaultValue={info.name}/>
           </Form.Item>
 
           <Form.Item
             label="SĐT"
-            rules={[
-              {
-                  required: true,
-                  message: 'Vui lòng nhập SĐT!',
-              },
-              { 
-                  type: 'string', 
-                  min: 8, 
-                  max: 10, 
-                  message: 'Hãy nhập số điện thoại hợp lệ',
-              },
-            ]}>
+            name="phone">
             <Input defaultValue={info.phone}/>
           </Form.Item>
 
           <Form.Item 
             label = "Email"
-            readOnly = "true"
             >
-            <Input defaultValue={info.email}/>
+            {info.email}
           </Form.Item>
 
           <Form.Item
             label = "Địa chỉ"
-            rules={[
-              {
-                  required: true,
-                  message: 'Vui lòng địa chỉ mặc định',
-              },
-            ]}>
+            name="address">
             <Input defaultValue={info.address}/>
           </Form.Item>  
           <Form.Item {...tailFormItemLayout}>
@@ -205,7 +195,7 @@ const ProfileForm = (props) => {
             </div>
           </Form.Item>
             
-          </Form>
+        </Form>
           </main>
       </div>
     </div>

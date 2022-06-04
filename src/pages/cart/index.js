@@ -7,30 +7,39 @@ import { Table, Form, Button, InputNumber, Input, DatePicker, notification } fro
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { deleteProdFromCart, orderList } from '../../api/cart';
 import { payment } from '../../api/buyerInterface';
-import { useNavigate } from 'react-router-dom'
-
-const dateFormat = 'DD/MM/YYYY';
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 
+const dateFormat = 'DD/MM/YYYY';
 
 const columns = [
   {
+    title: 'No.',
+    dataIndex: 'key',
+    width: '8%',
+  },
+  {
+    key : '0',
     title: 'Sản phẩm',
     dataIndex: 'product',
   },
   {
+    key : '1',
     title: 'Đơn giá',
     dataIndex: 'price',
   },
   {
+    key : '2',
     title: 'Số lượng',
     dataIndex: 'amount',
   },
   {
+    key : '3',
     title: 'Tổng tiền',
     dataIndex: 'total',
   },
   {
+    key : '4',
     title: 'Thao tác',
     dataIndex: 'bt'
   },
@@ -88,8 +97,8 @@ const Cart = () => {
 
   let tmpData = 0
   let tmpDataForm = 0
-  if (listorder.length > 0) {
-    listorder.forEach(element => {
+  if (listOrder.length > 0) {
+    listOrder.forEach(element => {
       element.amount = 1
       data.push({
         key: tmpData++,
@@ -142,7 +151,7 @@ const Cart = () => {
   }
 
   let array = []
-  for (let index = 0; index < listorder.length; index++) {
+  for (let index = 0; index < listOrder.length; index++) {
     array[index] = index
   }
   let id_product_FormData = new FormData();
@@ -269,7 +278,7 @@ const Cart = () => {
         <div style={{ margin: '0 15%' }}>
           <Table rowSelection={rowSelection} columns={columns} dataSource={dataForm} />;
         </div>
-        {(listorder.length > 0) ?
+        {(listOrder.length > 0) ?
           <div id='pay' style={{ marginLeft: '60%', float: 'left' }}>
             <scan>Thanh toán ({rowSelection.selectedRowKeys.length} sản phẩm):
               <scan style={{ color: 'red', fontSize: '25px', marginLeft: '8px' }}>

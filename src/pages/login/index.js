@@ -9,7 +9,6 @@ import { useCookies } from "react-cookie";
 function Login() {
   const [cookies] = useCookies(["userInfo"]);  
   // if(localStorage['user-info']!=null) {window.location.href = '/productList'}
-  console.log(cookies.userInfo)
   if (cookies.userInfo.role!=null){window.location.href = '/productList'}
   else{
     return (      
