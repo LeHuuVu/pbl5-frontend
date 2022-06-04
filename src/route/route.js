@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Login from '../pages/login';
 import Dashboad from '../pages/dashboad';
 import Register from '../pages/register';

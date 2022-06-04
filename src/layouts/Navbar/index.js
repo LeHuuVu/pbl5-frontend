@@ -15,6 +15,7 @@ export default function Navbar() {
   const onSearch = (value) => console.log(value);
   // let user = localStorage.getItem('user-info');
   let role = 1
+  role = info.role
   // if (typeof localStorage['user-info'] != "undefined") {
   //   if (JSON.parse(localStorage['user-info']).role === 2) {
   //     role = 2
@@ -56,7 +57,6 @@ export default function Navbar() {
     )
   }
   else {
-    role = info.role
     checkLogin = (
       <div className="flex items-center">
         <div className="px-4">
@@ -87,7 +87,7 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex px-16 items-center cartNavbar" style={{ float: 'right' }}>
-        {(role == 1) && (typeof localStorage['user-info'] != "undefined")
+        {(role === 1) || (typeof localStorage['user-info'] != "undefined")
           ?
           <>
             <div className="px-4">
