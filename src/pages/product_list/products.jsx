@@ -4,21 +4,21 @@ import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import Product from './product';
-import { listProduct } from '../../api/buyerInterface';
+import { listProductv2 } from '../../api/buyerInterface';
 
 const ProductListForm = () => {
     const [list, setList] = useState([]);
 
     useEffect(async () => {
-        await listProduct().then((res) => {
+        await listProductv2().then((res) => {
             setList((list) => res.data);
         }).catch((error) => console.log(error.response.request.response))
     }, [])
     let component;
     if (list !== null) {
-        if (list.data !== undefined) {
+        if (list !== undefined) {
             component = (
-                list.data.map((item) => <Product item={item}></Product>)
+                list.map((item) => <Product item={item}></Product>)
             )
         }
     }

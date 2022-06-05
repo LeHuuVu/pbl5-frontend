@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification } from 'antd';
 import './index.css'
-import Layout from '../../layouts/Layout'
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
@@ -18,7 +17,7 @@ import { productDetail } from '../../api/buyerInterface';
 import moment from 'moment';
 import { addProdToCart } from '../../api/cart';
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 
 function averageRate(list_review) {
     if (list_review !== undefined) {
@@ -34,7 +33,7 @@ function averageRate(list_review) {
 }
 function Product_Detail() {
     // if (localStorage['user-info'] == null) { window.location.href = '/login' }  
-    const [cookies] = useCookies(["userInfo"]); 
+    // const [cookies] = useCookies(["userInfo"]); 
     const { id } = useParams();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -59,9 +58,16 @@ function Product_Detail() {
         } catch (e) { console.error(e) }
     }, [product])
 
-    const userId = cookies.userInfo.id
+    let userInfo
+    if(localStorage.getItem('remember') ==='local'){
+      userInfo = JSON.parse(localStorage.getItem('user-info'));
+    }else if(localStorage.getItem('remember') ==='session'){
+      userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+    }
+
+    const userId = userInfo.id
     const OnClick = async () => {
-        if(cookies.userInfo.id!=null){
+        if(userInfo.id!=null){
             await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
             openNotificationSuccess(res)
         }).catch((error) => {
@@ -225,7 +231,7 @@ function Product_Detail() {
             catch (e) { console.error(e) }
         }
     }
-    if (cookies.userInfo.role===2){            
+    if (userInfo.role===2){            
         notification.info({
             message: "Hãy đăng nhập tài khoản mua hàng để có thể mua mặt hàng này ",
             duration: 3,
@@ -234,12 +240,10 @@ function Product_Detail() {
     }
     else{
         return (
-            <Layout>
-                <Layout.Main>
-                    {content}
-                    {review}
-                </Layout.Main>
-            </Layout>
+            <div>
+                {content}
+                {review}
+            </div>
         );
     }
 }

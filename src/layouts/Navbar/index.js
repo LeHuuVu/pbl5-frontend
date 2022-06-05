@@ -4,17 +4,27 @@ import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import './style.scss';
-import { useCookies} from "react-cookie"
+// import { useCookies} from "react-cookie"
 import logo from '../../logo_app.png';
 
 export default function Navbar() {
-  const [cookies, removeCookie] = useCookies(["userInfo"]); 
+  // const [cookies, removeCookie] = useCookies(["userInfo"]); 
   // let info = JSON.parse(localStorage.getItem('user-info'));
-  let info = cookies.userInfo;
+  let info;
+  if(localStorage.getItem('remember') ==='local'){
+    info = JSON.parse(localStorage.getItem('user-info'));
+  }else if(localStorage.getItem('remember') ==='session'){
+    info = JSON.parse(sessionStorage.getItem('user-info'));
+  }
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
   // let user = localStorage.getItem('user-info');
-  let role = 1
+  let role;
+  if(info !== undefined){
+    if(info!==null){
+      role = info.role
+    }
+  }
   // if (typeof localStorage['user-info'] != "undefined") {
   //   if (JSON.parse(localStorage['user-info']).role === 2) {
   //     role = 2
@@ -27,7 +37,9 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       localStorage.clear();
-      removeCookie('userInfo');
+      sessionStorage.clear();
+      role = 3;
+      // removeCookie('userInfo');
       window.location.href = '/login';
     } catch (error) {
         console.log(error)
@@ -46,26 +58,25 @@ export default function Navbar() {
     </Menu>
   )
   let checkLogin
-  if (info.role == null) {
+  if (info !== undefined && info!==null) {
+      checkLogin = (
+        <div className="flex items-center">
+          <div className="px-4">
+            <Dropdown overlay={userInformation} trigger={['click']}>
+              <div className="avatarNavbar">
+                <Avatar src={info.avatar} className="" style={{ float: 'right', width: '40px', height: '40px' }} />
+              </div>
+            </Dropdown>
+          </div>
+        </div>
+      )
+  }
+  else {   
     checkLogin = (
       <div>
         <a href="/Register" style={{ padding: 10 }}> Đăng ký</a>
         |
         <a href="/login" style={{ padding: 10 }}>Đăng nhập</a>
-      </div>
-    )
-  }
-  else {
-    role = info.role
-    checkLogin = (
-      <div className="flex items-center">
-        <div className="px-4">
-          <Dropdown overlay={userInformation} trigger={['click']}>
-            <div className="avatarNavbar">
-              <Avatar src={info.avatar} className="" style={{ float: 'right', width: '40px', height: '40px' }} />
-            </div>
-          </Dropdown>
-        </div>
       </div>
     )
   }
@@ -75,7 +86,7 @@ export default function Navbar() {
       <div className="flex" style={{ float: 'left' }}>
         <div className="w-20 ml-16">
           <a href={role !== 2 ? "/productList" : "/sellingProduct"} style={{ textDecoration: 'none', fontSize: '25px' }}>
-            <img src={logo} alt="logo" className="logo" />!Ponzi
+            <img src={logo} alt="logo" className="logo" />
           </a>
         </div>
       </div>
@@ -87,7 +98,7 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex px-16 items-center cartNavbar" style={{ float: 'right' }}>
-        {(role == 1) && (typeof localStorage['user-info'] != "undefined")
+        {(role === 1)
           ?
           <>
             <div className="px-4">
