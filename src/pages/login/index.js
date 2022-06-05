@@ -3,12 +3,12 @@ import React from 'react';
 import "./style.css";
 import LoginForm from './loginForm';
 import 'antd/dist/antd.min.css';
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 
 function Login() {
-  const [cookies] = useCookies(["userInfo"]);  
-  // if(localStorage['user-info']!=null) {window.location.href = '/productList'}
-  if (cookies.userInfo.role!=null){window.location.href = '/productList'}
+  // const [cookies] = useCookies(["userInfo"]);  
+  if(localStorage['user-info']!=null && sessionStorage['user-info']!=null) {window.location.href = '/productList'}
+  // if (cookies.userInfo!==undefined){window.location.href = '/productList'}
   else{
     return (
           <div>

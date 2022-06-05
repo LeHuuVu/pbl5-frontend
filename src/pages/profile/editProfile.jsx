@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Avatar, Input, Button, Form, notification, Upload, message} from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import './index.scss'
 import axios from '../../api/axios';
 import ImgCrop from 'antd-img-crop';
 
 const ProfileForm = (props) => {
-  const [cookies, setCookie] = useCookies(["userInfo"]);
+  // const [cookies, setCookie] = useCookies(["userInfo"]);
   const [img, setImg] = useState();
   const [loading, setLoading] = useState(false);
   const dummyRequest = ({ file, onSuccess }) => {
@@ -20,7 +20,12 @@ const ProfileForm = (props) => {
   }
 
   // const { store } = useContext(ReactReduxContext)
-  let info = cookies.userInfo
+  let info;
+  if(localStorage.getItem('remember') ==='local'){
+    info = JSON.parse(localStorage.getItem('user-info'));
+  }else if(localStorage.getItem('remember') ==='session'){
+    info = JSON.parse(sessionStorage.getItem('user-info'));
+  }
   const save = (values) => {
     const formData = new FormData()
     formData.append('id_user', info.id)
@@ -57,12 +62,18 @@ const ProfileForm = (props) => {
             message: 'Thay đổi thành công!',
             duration: 3,
         })
-        console.log(res)
-        setCookie("userInfo", JSON.stringify(res.data),
-        {
-          path: "/",
-          maxAge: localStorage.getItem('age')
-        });
+        if(localStorage.getItem('remember') ==='local'){
+          localStorage.setItem("user-info", JSON.stringify(res.data));
+        }    
+        else if(localStorage.getItem('remember') ==='session'){
+          sessionStorage.setItem("user-info", JSON.stringify(res.data));
+        }
+        // console.log(res)
+        // setCookie("userInfo", JSON.stringify(res.data),
+        // {
+        //   path: "/",
+        //   maxAge: localStorage.getItem('age')
+        // });
         setMode()   
     }
     //image handle

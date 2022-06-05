@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import logo from '../../logo_app.png';
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { register } from '../../api/login';
 import axios from '../../api/axios';
 import {
@@ -29,7 +29,7 @@ const dummyRequest = ({ file, onSuccess }) => {
   };
 
 const RegisterForm = () => {
-    const [cookies, setCookie] = useCookies(["userInfo"]);  
+    // const [cookies, setCookie] = useCookies(["userInfo"]);  
     const navigate = useNavigate();
     const [componentSize, setComponentSize] = useState('default');
     const [loading, setLoading] = useState(false);
@@ -83,16 +83,18 @@ const RegisterForm = () => {
             message: 'Chào mừng'+res.data.name+' đến với E-Commerce!',
             duration: 3,
         })
-        setCookie("userInfo", JSON.stringify(res.data),
-        {
-          path: "/",
-          maxAge: 43200,
-        });
-        localStorage.setItem("age", 43200);
-        // localStorage.setItem("user-info", JSON.stringify(res.data));
+        // setCookie("userInfo", JSON.stringify(res.data),
+        // {
+        //   path: "/",
+        //   maxAge: 43200,
+        // });
+        // localStorage.setItem("age", 43200);
+        sessionStorage.setItem("user-info", JSON.stringify(res.data));
+        localStorage.setItem("remember", 'session');
+        if(res.data.role!==2){navigate("/productList");}
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
-        if(cookies.userInfo.role!==2){navigate("/productList");}
+        // if(cookies.userInfo.role!==2){navigate("/productList");}
     }
     const onFormLayoutChange = ({ size }) => {
         setComponentSize(size);

@@ -2,16 +2,21 @@ import React,{useState} from 'react'
 import { Avatar, Button } from 'antd'
 // import { EditFilled } from '@ant-design/icons'
 // import { ReactReduxContext } from 'react-redux'
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import './index.scss'
 import Edit from './editProfile';
 
 const ProfileForm = () => {
-  const [cookies] = useCookies(["userInfo"]);
+  // const [cookies] = useCookies(["userInfo"]);
   const [mode, setMode] = useState(false);
 
   // const { store } = useContext(ReactReduxContext)
-  let info = cookies.userInfo
+  let info;
+  if(localStorage.getItem('remember') ==='local'){
+    info = JSON.parse(localStorage.getItem('user-info'));
+  }else if(localStorage.getItem('remember') ==='session'){
+    info = JSON.parse(sessionStorage.getItem('user-info'));
+  }
   const changeMode = () => {
     setMode(false)
   }

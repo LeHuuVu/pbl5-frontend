@@ -8,7 +8,7 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import { deleteProdFromCart, orderList } from '../../api/cart';
 import { payment } from '../../api/buyerInterface';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 
 const dateFormat = 'DD/MM/YYYY';
 
@@ -16,13 +16,21 @@ let s = 0;
 
 const Cart = () => {
   
-  const [cookies] = useCookies(["userInfo"]);  
+  // const [cookies] = useCookies(["userInfo"]);  
   const [isModalVisible, setIsModalVisible] = useState(false)
   const navigate = useNavigate();
+  let userInfo
+  if(localStorage.getItem('remember') ==='local'){
+    userInfo = JSON.parse(localStorage.getItem('user-info'));
+  }else if(localStorage.getItem('remember') ==='session'){
+    userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+  }
+  
+  if (userInfo === undefined) {
+    window.location.href = "/login"; 
+  }
 
-  if (cookies.userInfo.role == null) { navigate('/login') }
-
-  const userId = cookies.userInfo.id
+  const userId = userInfo.id
 
   const [listOrder, setOrder] = useState([]);
   const [reload, setReload] = useState(false);
@@ -93,38 +101,23 @@ const Cart = () => {
               defaultValue={record}
               style={{ marginRight: '10px' }}
               onChange={(e) => {
-                Object.assign()
-                let tmpArray = [...listOrder]
-                console.log(tmpArray[row.key-1].pivot)
-                console.log(listOrder[row.key-1].pivot)
-                tmpArray[row.key-1].pivot.amount = e;
-                console.log(tmpArray[row.key-1].pivot)
-                setOrder(tmpArray)
-                console.log(listOrder[row.key-1].pivot)
-                setOrder(tmpArray)
-                console.log(listOrder[row.key-1].pivot)
-                total[row.key-1] = e*row.price;
-                let s=0;
-                total.forEach(each => s+=each)
-                setTotal(s);
-                console.log(total)
-                console.log(s)
+                handleChange(e, row)
               }
               }
             />
           </div>
       ),
     },
-    // {
-    //   key : '3',
-    //   title: 'Tổng tiền',
-    //   dataIndex: 'total',
-    //   render: (record) => (
-    //     <div style={{ color: 'red' }}>
-    //       ₫{record}
-    //     </div>
-    //   )
-    // },
+    {
+      key : '3',
+      title: 'Tổng tiền',
+      dataIndex: 'total',
+      render: (record) => (
+        <div style={{ color: 'red' }}>
+          ₫{record}
+        </div>
+      )
+    },
     {
       key : '4',
       title: 'Thao tác',
@@ -135,22 +128,32 @@ const Cart = () => {
     },
   ];
 
+  async function handleChange(e, row){    
+    let tmpArray = [...listOrder]
+    tmpArray[row.key-1].pivot.amount = e;
+    setOrder(tmpArray)
+    total[row.key-1] = e*row.price;
+    let s = 0;
+    total.forEach((price)=>{s+=price});
+    setFinal(s);
+  }
+
+
   const data = [];//dùng để get dữ liệu từ Table
   const dataForm = [];//show dữ liệu trong Table với style
   let total = [];
-  const [totalP,setTotal] = useState(0)
+  const [final,setFinal] = useState(0);
 
   if (listOrder.length > 0) {
     listOrder.forEach((element,index) => {
-      element.pivot.amount = 1
       total[index] = element.pivot.amount*element.price;
       data.push({
         key: index,
         id: element.id,
         product: element.name,
         price: element.price,
-        // amount: element.pivot.amount,
-        // total: element.price * element.amount
+        amount: element.pivot.amount,
+        total: total[index]
       })
       dataForm.push({
         id: element.id,
@@ -260,7 +263,7 @@ const Cart = () => {
           <span style={{ marginTop: '10px' }}>Giỏ hàng</span>
         </div>
         <div style={{ margin: '0 15%' }}>
-          {console.log(dataForm)}
+          {/* {console.log(dataForm)} */}
           {/* {console.log(listOrder)} */}
           <Table columns={columns} dataSource={dataForm} />;
         </div>
@@ -269,8 +272,7 @@ const Cart = () => {
             <scan>Thanh toán ({listOrder.length} sản phẩm):
               <scan style={{ color: 'red', fontSize: '25px', marginLeft: '8px' }}>
                 ₫
-                <span style={{ margin: '0 10px 0 0' }}></span>
-                {totalP}
+                <span style={{ margin: '0 10px 0 0' }}>{final}</span>
                 VND
               </scan>
             </scan>
@@ -287,7 +289,7 @@ const Cart = () => {
                 <scan>Thanh toán ( sản phẩm):
                   <scan style={{ color: 'red', fontSize: '25px', marginLeft: '8px' }}>
                     ₫
-                    <span style={{ margin: '0 10px 0 0' }}>{s}</span>
+                    <span style={{ margin: '0 10px 0 0' }}>{final}</span>
                     VND
                   </scan>
                 </scan>

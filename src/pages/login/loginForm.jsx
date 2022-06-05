@@ -6,15 +6,16 @@ import 'antd/dist/antd.css';
 import './style.css';
 import { Form, Input, Button, Checkbox,notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useNavigate } from "react-router-dom";
+// import { useCookies } from "react-cookie";
 import logo from '../../logo_app.png';
 import {login} from '../../api/login';
 
 function LoginForm() {
-  const [cookies, setCookie] = useCookies(["userInfo"]);  
-  const navigate = useNavigate();
-  const [maxAge, setAge] = useState(86400);
+  // const [cookies, setCookie] = useCookies(["userInfo"]);  
+  // const navigate = useNavigate();
+  // const [maxAge, setAge] = useState(86400);
+  const [remember, setRemember] = useState(true);
   const onFinish = async (values) => {
     await login({
       email: values.email,
@@ -31,28 +32,44 @@ function LoginForm() {
       })
   };
   const openNotificationSuccess = (res) => {
-    // localStorage.setItem("user-info", JSON.stringify(res.data));
-    localStorage.setItem("age", maxAge);
-    setCookie("userInfo", JSON.stringify(res.data),
-    {
-      path: "/",
-      maxAge: maxAge,
-    });
+    if(remember){
+      localStorage.setItem("user-info", JSON.stringify(res.data));
+      localStorage.setItem("remember", 'local');
+    }    
+    else{
+      sessionStorage.setItem("user-info", JSON.stringify(res.data));
+      localStorage.setItem("remember", 'session');
+    }
+    // localStorage.setItem("age", maxAge);
+    // setCookie("userInfo", JSON.stringify(res.data),
+    // {
+    //   path: "/",
+    //   maxAge: maxAge,
+    // });
     notification.success({
       message: 'Chào mừng bạn quay lại, '+res.data.name+"!",
       duration: 3,
     })
     //retrieve data 
     // JSON.parse(localStorage.getItem('user-info'))
-    if(cookies.userInfo.role!==2){navigate("/productList");}
+    if(res.data.role===0){window.location.href= "/admin";}
+    else if(res.data.role!==2){window.location.href= "/productList";}
+    // if(cookies.userInfo.role!==2){navigate("/productList");}
   }
-  const remember = (e) => {
-    if(e.target.checked){setAge(90*86400)}
-    else(setAge(86400))
+  const onRemember = (e) => {
+    if(e.target.checked){
+      // setAge(90*86400)
+      setRemember(true);
+    }
+    else{
+      // setAge(86400)
+      setRemember(false);
+    }
+      
   };
   return (
     <div>
-      <title>E-Commerce Đăng nhập hoặc Đăng ký</title>
+      <title>!Ponzi Đăng nhập hoặc Đăng ký</title>
       <div>
         
       </div>
@@ -99,7 +116,7 @@ function LoginForm() {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox onChange={remember}>Ghi nhớ đăng nhập</Checkbox>
+                <Checkbox onChange={onRemember}>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
 
               <a className="login-form-forgot" href="">
@@ -111,7 +128,7 @@ function LoginForm() {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Đăng nhập
               </Button>
-              Hoặc <a href="http://localhost:3000/register">Đăng ký ngay!</a>
+              Hoặc <a href="/register">Đăng ký ngay!</a>
             </Form.Item>
           </Form>
         </div>

@@ -3,12 +3,13 @@ import React from 'react';
 // import "./index.css";
 import ProfileForm from './profileForm';
 import 'antd/dist/antd.min.css';
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 
 function Profile() {
-  const [cookies] = useCookies(["userInfo"]);  
+  // const [cookies] = useCookies(["userInfo"]);  
   
-  if(cookies.userInfo.role==null) {window.location.href = '/login'}
+  // if(cookies.userInfo.role==null) {window.location.href = '/login'}
+  if(localStorage['user-info']==null && sessionStorage['user-info']==null) {window.location.href = '/login'}
   else{
     return (
         <div>
