@@ -10,7 +10,7 @@ function Register() {
 
   // if (localStorage['role'] != null) { window.location.href = '/productList' }
   // if (cookies.userInfo.role!=null){window.location.href = '/productList'}
-  if(localStorage['user-info']!=null && sessionStorage['user-info']!=null) {window.location.href = '/productList'}
+  if(localStorage['user-info']!=null || sessionStorage['user-info']!=null) {window.location.href = '/productList'}
   else{
     return (
           <div>

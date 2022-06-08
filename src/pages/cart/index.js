@@ -6,13 +6,13 @@ import './index.css';
 import { Table, Form, Button, InputNumber, Input, DatePicker, notification, Modal } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { deleteProdFromCart, orderList } from '../../api/cart';
-import { payment } from '../../api/buyerInterface';
+import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
+import 'moment/locale/vi';
+import moment from 'moment';
 // import { useCookies } from "react-cookie";
 
 const dateFormat = 'DD/MM/YYYY';
-
-let s = 0;
 
 const Cart = () => {
   
@@ -25,10 +25,13 @@ const Cart = () => {
   }else if(localStorage.getItem('remember') ==='session'){
     userInfo = JSON.parse(sessionStorage.getItem('user-info'));
   }
-  
   if (userInfo === undefined) {
     window.location.href = "/login"; 
   }
+  moment.locale('de')
+  let date = new Date(Date.now());
+  const [deliveryAddress, setAddress] = useState(userInfo.address)
+  const [deliveryTime, setTime] = useState(date.setDate(date.getDate() + 5))
 
   const userId = userInfo.id
 
@@ -42,7 +45,8 @@ const Cart = () => {
       orderList({ 
         id_user: userId 
       }).then((res) => {
-        setOrder(res.data.data);
+        if(res.data.data.length > 0)
+        {setOrder(res.data.data);}
       }).catch((error) => console.log(error))
     } catch (e) { console.error(e) }
   }, [reload])
@@ -133,20 +137,19 @@ const Cart = () => {
     tmpArray[row.key-1].pivot.amount = e;
     setOrder(tmpArray)
     total[row.key-1] = e*row.price;
-    let s = 0;
-    total.forEach((price)=>{s+=price});
-    setFinal(s);
   }
 
 
-  const data = [];//dùng để get dữ liệu từ Table
-  const dataForm = [];//show dữ liệu trong Table với style
+  const data = [];
+  const dataForm = [];
   let total = [];
-  const [final,setFinal] = useState(0);
-
+  let final = 0;
+  console.log(listOrder)
   if (listOrder.length > 0) {
+    final = 0;
     listOrder.forEach((element,index) => {
       total[index] = element.pivot.amount*element.price;
+      final = final + total[index];
       data.push({
         key: index,
         id: element.id,
@@ -158,10 +161,7 @@ const Cart = () => {
       dataForm.push({
         id: element.id,
         key: index+1,
-        product: 
-        // {'name' : element.name, 
-        //     'image' : element.image,
-        //     'product_id' :  element.pivot.product_id},
+        product:
           <div className='_1Z2fe1'>
             <div className='_3mceb9'>
               <a title='' href={"/product_detail/" + element.pivot.product_id}>
@@ -182,59 +182,29 @@ const Cart = () => {
     });
   }
 
-  let array = []
-  for (let index = 0; index < listOrder.length; index++) {
-    array[index] = index
-  }
-  let id_product_FormData = new FormData();
-  let amount_order_FormData = new FormData();
   const OnBuy = () => {
     setIsModalVisible(true)
-    document.getElementById('pay').style.display = 'none'
-    data.forEach(element => {
-      // console.log(element)
-      id_product_FormData.append('id_product[]', element.id)
-      amount_order_FormData.append('amount_order[]', element.amount)
-      document.getElementById('amount_prod' + element.id).readOnly = true
-
-    });
-    // console(amount_order_FormData)
-    // console.log("...\n")
-    // console.log(data)
   }
 
-  let deliverytime;
-  let deliveryaddress;
-  const onFinish = (values) => {
-    var dateTime = new Date(values.delivery_time._d);
-
-    deliverytime = dateTime.getDate() + "/" + (dateTime.getMonth() + 1) + "/" + dateTime.getFullYear();
-
-    deliveryaddress = values.delivery_address
-
-    OnPayment()
-
-    // console.log(deliverytime);
-    // console.log(deliveryaddress)
-
-  };
-
-  const OnPayment = async () => {
-    await payment({
-      id_user: userId,
-      delivery_address: deliveryaddress,
-      delivery_time: deliverytime,
-      id_product_FormData,
-      amount_order_FormData
-    }).then((res) => {
+  const OnPayment = async (e) => {
+    let time;
+    time = moment(deliveryTime).toDate().getFullYear() + "-" + (moment(deliveryTime).toDate().getMonth() + 1) + "-" + moment(deliveryTime).toDate().getDate();
+    let formData = new FormData();
+    formData.append('id_user', userId)
+    formData.append('delivery_address', deliveryAddress)
+    formData.append('delivery_time', time)
+    data.forEach(element => {
+      formData.append('id_product[]', element.id)
+      formData.append('amount_order[]', element.amount)
+    });
+    await axios.post('/v2/order',formData).then((res) => {
       openNotificationPaymentSuccess(res)
     }).catch((error) => {
-      if (error.request.status === 400) {
-        notification.error({
-          message: 'Xin lỗi!!! Chúng tôi đang gặp phải một số vấn đề!',
-          duration: 3,
-        })
-      }
+      console.log(error)
+      notification.error({
+        message: 'Xin lỗi!!! Chúng tôi đang gặp phải một số vấn đề!',
+        duration: 3,
+      })
     })
   }
 
@@ -248,12 +218,8 @@ const Cart = () => {
       message: "Đã thanh toán thành công!",
       duration: 3,
     })
-    navigate('/cart')
+    navigate('/productList')
   }
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
   return (
       <div>
         <div style={{ marginLeft: '15%', fontSize: '35px', marginBottom: '25px', display: 'flex' }}>
@@ -263,8 +229,6 @@ const Cart = () => {
           <span style={{ marginTop: '10px' }}>Giỏ hàng</span>
         </div>
         <div style={{ margin: '0 15%' }}>
-          {/* {console.log(dataForm)} */}
-          {/* {console.log(listOrder)} */}
           <Table columns={columns} dataSource={dataForm} />;
         </div>
         {(listOrder.length > 0) ?
@@ -281,28 +245,22 @@ const Cart = () => {
           :
           null
         }
-
-        {(document.getElementById('pay') != null) ?
-          (document.getElementById('pay').style.display == 'none') ?
-            <div id='delivery' style={{ width: '50%', border: '2px solid #ff8e3c', borderRadius: '25px', padding: '15px', marginLeft: '25%' }}>
-              <div style={{ marginBottom: '20px', fontSize: '25px' }}>
-                <scan>Thanh toán ( sản phẩm):
-                  <scan style={{ color: 'red', fontSize: '25px', marginLeft: '8px' }}>
-                    ₫
-                    <span style={{ margin: '0 10px 0 0' }}>{final}</span>
-                    VND
-                  </scan>
-                </scan>
-              </div>
               <Modal
                 title="Xác nhận thanh toán"
                 visible={isModalVisible}
                 onOk={OnPayment}
                 onCancel={handleCancel}
-                okText="Xác nhận"
+                okText="Thanh toán"
                 cancelText="Hủy"
                 centered
               >
+              <h3>Thanh toán ({listOrder.length} sản phẩm):
+                <scan style={{ color: 'red', fontSize: '25px', marginLeft: '8px' }}>
+                  ₫
+                  <span style={{ margin: '0 10px 0 0' }}>{final}</span>
+                  VND
+                </scan>
+              </h3>
               <Form
                 name="basic"
                 labelCol={{
@@ -314,8 +272,6 @@ const Cart = () => {
                 initialValues={{
                   remember: true,
                 }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
                 <Form.Item
@@ -327,8 +283,10 @@ const Cart = () => {
                       message: 'Vui lòng nhập địa chỉ giao hàng!',
                     },
                   ]}
+                  onChange = {(e) => {setAddress(e.target.value)}}
                 >
-                  <Input />
+                  <Input 
+                  defaultValue = {deliveryAddress}/>
                 </Form.Item>
 
                 <Form.Item
@@ -340,9 +298,12 @@ const Cart = () => {
                       message: 'Vui lòng nhập thời gian giao hàng!',
                     },
                   ]}
+                  onChange = {(e) => {setTime(e.target.value)}}
                 >
                   <DatePicker
                     format={dateFormat}
+                    disabledDate={d => !d || d.isAfter(moment(deliveryTime).add(30, 'days')) || d.isBefore(moment(deliveryTime)) }
+                    defaultValue = {moment(deliveryTime)}
                   />
                 </Form.Item>
 
@@ -352,18 +313,10 @@ const Cart = () => {
                     span: 16,
                   }}
                 >
-                  <Button type="primary" htmlType="submit" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }}>
-                    Thanh toán
-                  </Button>
                 </Form.Item>
               </Form>
             </Modal>
             </div>
-            :
-            null
-          : null
-        }
-      </div>
   );
 }
 
