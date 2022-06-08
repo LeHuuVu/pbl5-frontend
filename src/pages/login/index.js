@@ -7,7 +7,7 @@ import 'antd/dist/antd.min.css';
 
 function Login() {
   // const [cookies] = useCookies(["userInfo"]);  
-  if(localStorage['user-info']!=null && sessionStorage['user-info']!=null) {window.location.href = '/productList'}
+  if(localStorage['user-info']!=null || sessionStorage['user-info']!=null) {window.location.href = '/productList'}
   // if (cookies.userInfo!==undefined){window.location.href = '/productList'}
   else{
     return (
