@@ -17,12 +17,12 @@ function averageRate(list_review) {
 }
 
 const Product = (item) => (
-    <div class="latest-articles-wrapper">
-        {console.log(item)}
+    <div>
+        {/* {console.log(item)} */}
         <a href={"/product_detail/"+item.item.product.id}>
             <Card
                 hoverable
-                style={{ width: 240 , float:'left'}}
+                style={{ width: 240 , float:'left',marginRight:'5%',marginBottom:'50px'}}
                 cover={<img alt="mainImage" src={item.item.product.image} />}
             >
                 <Rate allowHalf disabled defaultValue={averageRate(item.item.star_rating)} />

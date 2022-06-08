@@ -1,27 +1,27 @@
 @import 'antd/dist/antd.min.css';
 @import "~bootstrap/scss/bootstrap";
 .navbar {
-    background-color: #e3f6f5;
+    background-color: #dcf3f2;
     color: #272343;
     font-size: 16px;
-    padding:10;
-    display: 'flex';
     padding: 10px;
+    display: flex;
 }
 .cartNavbar{  
-    margin-left: 15%;
+    margin-right: 15%;
     padding-bottom: 15px;
+    display: inline-flex;
 }
 .avatarNavbar{
-    margin-right: 30px;
+    margin-right: 5%;
+    padding-top: 15px;
 }
 .searchNavbar{
-    margin-left: 20%;
+    // margin-left: 20%;
 }
-img.logo{
-    width: 60px;
-    margin-right: 30px;
-    margin-left: 30px;
+img.logo_nav{
+    width: auto;
+    height: 70px;
 }
 .cursor-pointer{
     .bell-icon {
@@ -36,3 +36,4 @@ img.logo{
     border-radius: 50%;
     background-color: #ffd803;
 }
+
