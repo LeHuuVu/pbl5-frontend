@@ -26,7 +26,8 @@ const ProductListForm = () => {
         component = (<h1>fail</h1>)
     }
     return (
-        <div className="latest-articles" style={{ margin: "0px 15%" }}>
+        // <div className="latest-articles" style={{ margin: "0px 15%" }}>
+        <div style={{ margin: "0px 14% 0 19%" }}>
             {component}
         </div>
     );

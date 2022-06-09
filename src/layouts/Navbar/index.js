@@ -11,17 +11,17 @@ export default function Navbar() {
   // const [cookies, removeCookie] = useCookies(["userInfo"]); 
   // let info = JSON.parse(localStorage.getItem('user-info'));
   let info;
-  if(localStorage.getItem('remember') ==='local'){
+  if (localStorage.getItem('remember') === 'local') {
     info = JSON.parse(localStorage.getItem('user-info'));
-  }else if(localStorage.getItem('remember') ==='session'){
+  } else if (localStorage.getItem('remember') === 'session') {
     info = JSON.parse(sessionStorage.getItem('user-info'));
   }
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
   // let user = localStorage.getItem('user-info');
   let role;
-  if(info !== undefined){
-    if(info!==null){
+  if (info !== undefined) {
+    if (info !== null) {
       role = info.role
     }
   }
@@ -42,11 +42,11 @@ export default function Navbar() {
       // removeCookie('userInfo');
       window.location.href = '/login';
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
   }
   const userInformation = (
-    <Menu className="rounded-2xl py-2 top-3 absolute transform -translate-x-1/2 left-1/2 menuNavbar">
+    <Menu className=" menuNavbar">
       <Menu.Item key="0">
         <a href="/profile">
           <a>Profile</a>
@@ -58,20 +58,20 @@ export default function Navbar() {
     </Menu>
   )
   let checkLogin
-  if (info !== undefined && info!==null) {
-      checkLogin = (
-        <div className="flex items-center">
-          <div className="px-4">
-            <Dropdown overlay={userInformation} trigger={['click']}>
-              <div className="avatarNavbar">
-                <Avatar src={info.avatar} className="" style={{ float: 'right', width: '40px', height: '40px' }} />
-              </div>
-            </Dropdown>
-          </div>
+  if (info !== undefined && info !== null) {
+    checkLogin = (
+      <div>
+        <div>
+          <Dropdown overlay={userInformation} trigger={['click']}>
+            <div className="avatarNavbar">
+              <Avatar src={info.avatar} className="" style={{ float: 'right', width: '40px', height: '40px' }} />
+            </div>
+          </Dropdown>
         </div>
-      )
+      </div>
+    )
   }
-  else {   
+  else {
     checkLogin = (
       <div>
         <a href="/Register" style={{ padding: 10 }}> Đăng ký</a>
@@ -82,37 +82,34 @@ export default function Navbar() {
   }
 
   return (
-    <div className=" flex justify-between items-center border-2 navbar select-none">
-      <div className="flex" style={{ float: 'left' }}>
-        <div className="w-20 ml-16">
-          <a href={role !== 2 ? "/productList" : "/sellingProduct"} style={{ textDecoration: 'none', fontSize: '25px' }}>
-            <img src={logo} alt="logo" className="logo" />
+    <div className="navbar">
+      <div >
+        <div>
+          <a href={role !== 2 ? "/productList" : "/sellingProduct"}>
+            <img src={logo} alt="logo" className="logo_nav"/>
           </a>
         </div>
       </div>
-      <div className="flex items-center searchNavbar" style={{ float: 'left' }}>
-        <div className="px-8" >
-          <Space direction="vertical">
-            <Search style={{ width: 500, height: 20 }} placeholder="input search text" onSearch={onSearch} enterButton />
-          </Space>
+      <div className="searchNavbar">
+        <div>
+            <Search style={{width:500}} placeholder="Bạn cần gì?" onSearch={onSearch} enterButton />
         </div>
       </div>
-      <div className="flex px-16 items-center cartNavbar" style={{ float: 'right' }}>
-        {(role === 1)
-          ?
-          <>
-            <div className="px-4">
-              <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%' }} />} />
-            </div>
-          </>
-          :
-          null
-        }
-        {/* <div className="px-4">
-          <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined className="cart" style={{ fontSize: '200%' }} />} />
-        </div> */}
+      <div className="cartNavbar">
+        <Space direction="horizontal">
+          {(role === 1)
+            ?
+            <>
+              <div style={{marginRight:'25px'}}>
+                <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined style={{ fontSize: '200%' }} />} />
+              </div>
+            </>
+            :
+            null
+          }
+          {checkLogin}
+        </Space>
       </div>
-      {checkLogin}
     </div>
   )
 }
