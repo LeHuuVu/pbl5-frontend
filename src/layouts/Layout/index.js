@@ -13,14 +13,14 @@ const Mylayout = ({ children }) => {
   return (
     <div className="otherlayout">
       <Layout>
-        <Layout className="site-layout">
+        <Layout className="site-layout" style={{backgroundColor:"rgb(202 220 227)"}}>
           <Navbar />
           <Content
             style={{
               margin: '45px 16px',
               padding: 24,
               minHeight: 280,
-              backgroud: '#fff',
+              // backgroundColor: '#fff',
             }}
           >
             { _get(main, 'props.children') }
