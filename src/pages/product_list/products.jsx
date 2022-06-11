@@ -12,7 +12,6 @@ const ProductListForm = () => {
     useEffect(async () => {
         await listProductV2().then((res) => {
             setList((list) => res.data);
-            console.log(res.data);
         })
         .catch((error) => console.log(error))
     }, [])
