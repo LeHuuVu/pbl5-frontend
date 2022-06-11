@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input,List } from 'antd';
 import './index.css'
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
@@ -18,6 +18,30 @@ import moment from 'moment';
 import { addProdToCart } from '../../api/cart';
 import { useNavigate } from "react-router-dom";
 // import { useCookies } from "react-cookie";
+
+const { TextArea } = Input;
+
+const CommentList = ({ comments }) => (
+    <List
+        dataSource={comments}
+        header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+        itemLayout="horizontal"
+        renderItem={(props) => <Comment {...props} />}
+    />
+);
+
+const Editor = ({ onChange, onSubmit, submitting, value }) => (
+    <>
+        <Form.Item>
+            <TextArea rows={4} onChange={onChange} value={value} placeholder='Thêm bình luận . . . . . . . . . . . . . .'/>
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }}>
+                Bình luận
+            </Button>
+        </Form.Item>
+    </>
+);
 
 function averageRate(list_review) {
     if (list_review !== undefined) {
@@ -40,6 +64,32 @@ function Product_Detail() {
     const [action, setAction] = useState(null);
     const [product, setProduct] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
+
+    // const [comments, setComments] = useState([]);
+    // const [submitting, setSubmitting] = useState(false);
+    const [value, setValue] = useState('');
+
+    const handleSubmit = () => {
+        if (!value) return;
+        // setSubmitting(true);
+        setTimeout(() => {
+            // setSubmitting(false);
+            setValue('');
+            //   setComments([
+            //     ...comments,
+            //     {
+            //       author: 'Han Solo',
+            //       avatar: 'https://joeschmoe.io/api/v1/random',
+            //       content: <p>{value}</p>,
+            //       datetime: moment().fromNow(),
+            //     },
+            //   ]);
+        }, 1000);
+    };
+
+    const handleChange = (e) => {
+        setValue(e.target.value);
+    };
     const navigate = useNavigate();
 
     try {
@@ -59,28 +109,28 @@ function Product_Detail() {
     }, [product])
 
     let userInfo
-    if(localStorage.getItem('remember') ==='local'){
-      userInfo = JSON.parse(localStorage.getItem('user-info'));
-    }else if(localStorage.getItem('remember') ==='session'){
-        if((sessionStorage.getItem('user-info')).role !== undefined){
-            userInfo = JSON.parse(sessionStorage.getItem('user-info'));
-        }
+    if (localStorage.getItem('remember') === 'local') {
+        userInfo = JSON.parse(localStorage.getItem('user-info'));
+    } else if (localStorage.getItem('remember') === 'session') {
+        userInfo = JSON.parse(sessionStorage.getItem('user-info'));
     }
+    // console.log(userInfo)
 
     const userId = userInfo.id
     const OnClick = async () => {
-        if(userInfo.id!=null){
+        if (userInfo.id != null) {
             await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
-            openNotificationSuccess(res)
-        }).catch((error) => {
-            if (error.request.status === 400) {
-                notification.error({
-                    message: 'Sản phẩm đã có trong Giỏ hàng',
-                    duration: 3,
-                })
-            }
-        })}
-        else{
+                openNotificationSuccess(res)
+            }).catch((error) => {
+                if (error.request.status === 400) {
+                    notification.error({
+                        message: 'Sản phẩm đã có trong Giỏ hàng',
+                        duration: 3,
+                    })
+                }
+            })
+        }
+        else {
             notification.info({
                 message: "Hãy đăng nhập để có thể mua mặt hàng này",
                 duration: 3,
@@ -166,11 +216,23 @@ function Product_Detail() {
                             comments
                             :
                             <div>
-                                <div style={{fontSize: '18px', marginTop: '15px' ,marginLeft:'15%'}}>
+                                <div style={{ fontSize: '18px', marginTop: '15px', marginLeft: '15%' }}>
                                     <p>Không có đánh giá</p>
                                 </div>
                             </div>
                         }
+                        <Rate allowHalf defaultValue={0} style={{marginLeft:'46px'}}/>
+                        <Comment
+                            avatar={<Avatar src={userInfo.avatar} alt={userInfo.name} />}
+                            content={
+                                <Editor
+                                    onChange={handleChange}
+                                    onSubmit={handleSubmit}
+                                    // submitting={submitting}
+                                    value={value}
+                                />
+                            }
+                        />
                     </div>
                 )
             }
@@ -197,7 +259,7 @@ function Product_Detail() {
                                 <table>
                                     <tr>
                                         <th colspan="2">
-                                            <b style={{ marginLeft: '30px' }}>| {final}</b>
+                                            <b style={{ marginLeft: '30px' ,marginRight:'30px'}}>| {final}</b>
                                             <Rate allowHalf disabled value={totalRate} />
                                             <b>| {product.product.amount_sold} đã bán</b>
                                         </th>
@@ -233,14 +295,14 @@ function Product_Detail() {
             catch (e) { console.error(e) }
         }
     }
-    if (userInfo.role===2){            
+    if (userInfo.role === 2) {
         notification.info({
             message: "Hãy đăng nhập tài khoản mua hàng để có thể mua mặt hàng này ",
             duration: 3,
         })
-    navigate("/sellingProduct");
+        navigate("/sellingProduct");
     }
-    else{
+    else {
         return (
             <div>
                 {content}
