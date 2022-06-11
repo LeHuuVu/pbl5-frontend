@@ -109,10 +109,15 @@ function Product_Detail() {
     }, [product])
 
     let userInfo
+    let role = 1;
     if (localStorage.getItem('remember') === 'local') {
         userInfo = JSON.parse(localStorage.getItem('user-info'));
-    } else if (localStorage.getItem('remember') === 'session') {
-        userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+        role = userInfo.role;
+    } else if (localStorage.getItem('remember') === 'session') {    
+        if((sessionStorage.getItem('user-info')).role !== undefined){
+            userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+            role = userInfo.role;
+        }
     }
     // console.log(userInfo)
     const OnClick = async () => {
@@ -293,7 +298,7 @@ function Product_Detail() {
             catch (e) { console.error(e) }
         }
     }
-    if (userInfo.role === 2) {
+    if (role === 2) {
         notification.info({
             message: "Hãy đăng nhập tài khoản mua hàng để có thể mua mặt hàng này ",
             duration: 3,
