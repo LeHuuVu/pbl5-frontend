@@ -23,13 +23,13 @@ const Cart = () => {
   if(localStorage.getItem('remember') ==='local'){
     userInfo = JSON.parse(localStorage.getItem('user-info'));
   }else if(localStorage.getItem('remember') ==='session'){
-    if((sessionStorage.getItem('user-info')).role !== undefined){
+    if((sessionStorage.getItem('user-info')) !== null){
       userInfo = JSON.parse(sessionStorage.getItem('user-info'));
     }
   }
-  if (userInfo === undefined) {
-    window.location.href = "/login"; 
-  }
+  // if (userInfo === undefined) {
+  //   window.location.href = "/login"; 
+  // }
   moment.locale('de')
   let date = new Date(Date.now());
   const [deliveryAddress, setAddress] = useState(userInfo.address)
