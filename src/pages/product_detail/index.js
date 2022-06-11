@@ -115,11 +115,9 @@ function Product_Detail() {
         userInfo = JSON.parse(sessionStorage.getItem('user-info'));
     }
     // console.log(userInfo)
-
-    const userId = userInfo.id
     const OnClick = async () => {
-        if (userInfo.id != null) {
-            await addProdToCart({ id_user: userId, id_product: id }).then((res) => {
+        if (userInfo != null) {
+            await addProdToCart({ id_user: userInfo.id, id_product: id }).then((res) => {
                 openNotificationSuccess(res)
             }).catch((error) => {
                 if (error.request.status === 400) {
@@ -223,7 +221,7 @@ function Product_Detail() {
                         }
                         <Rate allowHalf defaultValue={0} style={{marginLeft:'46px'}}/>
                         <Comment
-                            avatar={<Avatar src={userInfo.avatar} alt={userInfo.name} />}
+                            // avatar={<Avatar src={userInfo.avatar} alt={userInfo.name} />}
                             content={
                                 <Editor
                                     onChange={handleChange}
