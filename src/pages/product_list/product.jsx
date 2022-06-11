@@ -8,7 +8,7 @@ function averageRate(list_review) {
         if (list_review.length > 0) {
             let res = 0;
             for (let i = 0; i < list_review.length; i++) {
-                res += list_review[i].review.star_rating;
+                res += list_review[i];
             }
             return (res / list_review.length);
         }
