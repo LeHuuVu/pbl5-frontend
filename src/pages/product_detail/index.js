@@ -114,7 +114,7 @@ function Product_Detail() {
         userInfo = JSON.parse(localStorage.getItem('user-info'));
         role = userInfo.role;
     } else if (localStorage.getItem('remember') === 'session') {    
-        if((sessionStorage.getItem('user-info')).role !== undefined){
+        if((sessionStorage.getItem('user-info')) !== undefined){
             userInfo = JSON.parse(sessionStorage.getItem('user-info'));
             role = userInfo.role;
         }
