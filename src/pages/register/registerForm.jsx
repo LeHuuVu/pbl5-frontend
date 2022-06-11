@@ -89,8 +89,8 @@ const RegisterForm = () => {
         //   maxAge: 43200,
         // });
         // localStorage.setItem("age", 43200);
-        sessionStorage.setItem("user-info", JSON.stringify(res.data));
-        localStorage.setItem("remember", 'session');
+        localStorage.setItem("user-info", JSON.stringify(res.data));
+        localStorage.setItem("remember", 'local');
         if(res.data.role!==2){window.location.href= "/productList";}
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
