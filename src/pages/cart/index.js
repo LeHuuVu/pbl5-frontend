@@ -27,9 +27,9 @@ const Cart = () => {
       userInfo = JSON.parse(sessionStorage.getItem('user-info'));
     }
   }
-  // if (userInfo === undefined) {
-  //   window.location.href = "/login"; 
-  // }
+  if (userInfo === undefined) {
+    window.location.href = "/login"; 
+  }
   moment.locale('de')
   let date = new Date(Date.now());
   const [deliveryAddress, setAddress] = useState(userInfo.address)
