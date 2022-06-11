@@ -7,7 +7,7 @@ import 'antd/dist/antd.min.css';
 
 function ProductList() {
   // const [cookies] = useCookies(["userInfo"]);
-  let role
+  let role = 1;
   if(localStorage.getItem('remember') ==='local'){
     role = JSON.parse(localStorage.getItem('user-info')).role;
   }else if(localStorage.getItem('remember') ==='session'){
