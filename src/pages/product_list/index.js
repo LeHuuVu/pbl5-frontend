@@ -7,11 +7,13 @@ import 'antd/dist/antd.min.css';
 
 function ProductList() {
   // const [cookies] = useCookies(["userInfo"]);
-  let role
+  let role = 1;
   if(localStorage.getItem('remember') ==='local'){
     role = JSON.parse(localStorage.getItem('user-info')).role;
   }else if(localStorage.getItem('remember') ==='session'){
-    role = JSON.parse(sessionStorage.getItem('user-info')).role;
+    if((sessionStorage.getItem('user-info')).role !== undefined){
+      role = JSON.parse(sessionStorage.getItem('user-info')).role;
+    }
   }
   if(role===2) {window.location.href = '/sellingProduct'}
   // else if(role===0) {window.location.href = '/admin'}
