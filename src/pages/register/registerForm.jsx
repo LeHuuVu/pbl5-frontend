@@ -91,7 +91,7 @@ const RegisterForm = () => {
         // localStorage.setItem("age", 43200);
         sessionStorage.setItem("user-info", JSON.stringify(res.data));
         localStorage.setItem("remember", 'session');
-        if(res.data.role!==2){navigate("/productList");}
+        if(res.data.role!==2){window.location.href= "/productList";}
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
         // if(cookies.userInfo.role!==2){navigate("/productList");}
