@@ -62,7 +62,9 @@ function Product_Detail() {
     if(localStorage.getItem('remember') ==='local'){
       userInfo = JSON.parse(localStorage.getItem('user-info'));
     }else if(localStorage.getItem('remember') ==='session'){
-      userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+        if((sessionStorage.getItem('user-info')).role !== undefined){
+            userInfo = JSON.parse(sessionStorage.getItem('user-info'));
+        }
     }
 
     const userId = userInfo.id
