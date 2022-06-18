@@ -13,7 +13,7 @@ import {
     LikeFilled,
     LikeOutlined,
 } from '@ant-design/icons';
-import { productDetail } from '../../api/buyerInterface';
+import { productDetail2 } from '../../api/buyerInterface';
 import moment from 'moment';
 import { addProdToCart } from '../../api/cart';
 import { useNavigate } from "react-router-dom";
@@ -21,14 +21,14 @@ import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
-const CommentList = ({ comments }) => (
-    <List
-        dataSource={comments}
-        header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
-        itemLayout="horizontal"
-        renderItem={(props) => <Comment {...props} />}
-    />
-);
+// const CommentList = ({ comments }) => (
+//     <List
+//         dataSource={comments}
+//         header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+//         itemLayout="horizontal"
+//         renderItem={(props) => <Comment {...props} />}
+//     />
+// );
 
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
     <>
@@ -64,6 +64,7 @@ function Product_Detail() {
     const [action, setAction] = useState(null);
     const [product, setProduct] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
+    const [approve, setApprove] = useState(false);
 
     // const [comments, setComments] = useState([]);
     // const [submitting, setSubmitting] = useState(false);
@@ -95,8 +96,19 @@ function Product_Detail() {
     try {
         useEffect(() => {
             try {
-                productDetail({ id_product: id }).then((res) => {
+                let userID = null;
+                if(localStorage.getItem('remember') ==='local'){
+                    userID = JSON.parse(localStorage.getItem('user-info')).id;
+                  }else if(localStorage.getItem('remember') ==='session'){
+                    if((sessionStorage.getItem('user-info')) !== null){
+                      userInfo = JSON.parse(sessionStorage.getItem('user-info')).id;
+                    }
+                }
+                productDetail2({ 
+                    id_product: id,
+                    id_user: userID}).then((res) => {
                     setProduct((product) => res.data);
+                    checkReview(res.data);
                 }).catch((error) => console.log(error.response.request.response))
             } catch (e) { console.error(e) }
         }, [])
@@ -181,6 +193,14 @@ function Product_Detail() {
         <span key="comment-basic-reply-to">Reply to</span>,
     ];
 
+    const checkReview = (data) => {
+        console.log(data.review)
+        if(data!=null && data.review!== undefined) {
+            if(data.review==='approved'){setApprove(true);}
+            else if(data.review==='denied') (setApprove(false))
+        }
+    };
+    
     let comments;
     let review;
     if (product !== null) {
@@ -208,11 +228,12 @@ function Product_Detail() {
                                 <Tooltip title={moment(item.review.updated_at).format('YYYY-MM-DD HH:mm:ss')}>
                                     <span>{moment(item.review.updated_at).fromNow()}</span>
                                 </Tooltip>
-                            }
-                        >
-                        </Comment>)
+                        }
+                    >
+                    </Comment>)
                 )
-                review = (
+                
+                if(approve){review = (
                     <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
                         <h2>Đánh giá</h2>
                         {product.list_review.length > 0 ?
@@ -237,7 +258,7 @@ function Product_Detail() {
                             }
                         />
                     </div>
-                )
+                )}
             }
             catch (e) { console.error(e) }
         }
