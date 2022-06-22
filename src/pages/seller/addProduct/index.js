@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import logo from '../../logo_app.png';
 // import { useCookies } from "react-cookie";
-import { register, registerSeller } from '../../api/login';
+import { register } from '../../api/login';
 import axios from '../../api/axios';
 import {
     Form,
@@ -36,7 +36,7 @@ const RegisterForm = () => {
     const [role, setRole] = useState(1);
     const [img, setImg] = useState();
     const onFinish = (values) => {
-        if(!seller){if(img === undefined) {
+        if(img === undefined) {
             register({
                 name: values.name,
                 email: values.email,
@@ -73,47 +73,6 @@ const RegisterForm = () => {
                         })
                     }
                 })
-        }}
-        else {if(img === undefined) {
-            registerSeller({
-                name: values.name,
-                email: values.email,
-                phone: values.phone,
-                role: role,
-                address: values.address,
-                password: values.password,
-                company_name: values.company_name,
-            }).then(res => openNotificationSuccess(res))
-                .catch((error) => {
-                    if (error.request.status === 400) {
-                        notification.error({
-                            message: 'Email này đã được đăng ký!',
-                            duration: 3,
-                        })
-                    }
-                })
-        }
-        else{
-            const formData = new FormData()
-            formData.append('email', values.email)
-            formData.append('name', values.name)
-            formData.append('phone', values.phone)
-            formData.append('role', role)
-            formData.append('avatar', img.originFileObj)
-            formData.append('address', values.address)
-            formData.append('password', values.password)
-            formData.append('company_name', values.company_name)
-            axios.post('/v1/registerSeller',formData).then(res => openNotificationSuccess(res))
-                .catch((error) => {
-                    console.log(error)
-                    if (error.request.status === 400) {
-                        notification.error({
-                            message: 'Email hpặc số điện thoại này đã được đăng ký!',
-                            duration: 3,
-                        })
-                    }
-                })
-        }
         }
 
     };
@@ -131,7 +90,6 @@ const RegisterForm = () => {
         localStorage.setItem("user-info", JSON.stringify(res.data));
         localStorage.setItem("remember", 'local');
         if(res.data.role!==2){window.location.href= "/productList";}
-        else if(res.data.role!==1){window.location.href= "/sellingProduct";}
         //retrieve data 
         // JSON.parse(localStorage.getItem('user-info'))
         // if(cookies.userInfo.role!==2){navigate("/productList");}
@@ -398,23 +356,8 @@ const RegisterForm = () => {
                             >
                                 <Input />
                             </Form.Item>
-                            
-                            { seller ?
-                                <Form.Item
-                                    name="company_name"
-                                    label="Tên doanh nghiệp"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng nhập Tên doanh nghiệp của bạn!',
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                :null
-                            }
-                            
+
+
                             <Form.Item
                                 name="agreement"
                                 valuePropName="checked"

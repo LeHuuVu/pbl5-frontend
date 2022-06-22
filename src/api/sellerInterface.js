@@ -7,3 +7,5 @@ export const sellingproductDetail = async (argument) => instance.post('/v1/getDe
 export const delSellingProd = async (argument) => instance.post('/v1/delProduct',argument)
 //update product
 export const updateProduct = async (argument) => instance.post('/v1/delProduct',argument)
+//create product
+export const createProduct = async (argument) => instance.post('/v1/createNewProduct',argument)
