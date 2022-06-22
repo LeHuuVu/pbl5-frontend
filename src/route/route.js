@@ -4,6 +4,7 @@ import Register from '../pages/register';
 import ProductList from '../pages/product_list';
 import SellingProductList from '../pages/seller/sellingProduct';
 import SellingProductDetail from '../pages/seller/sellingProduct_detail';
+import AddProduct from '../pages/seller/addProduct';
 import MenuAdmin from '../pages/admin/menu';
 import Profile from '../pages/profile';
 import Cart from '../pages/cart';
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/productList" element={<ProductList />} />
           <Route path="/sellingProduct" element={<SellingProductList />} />
           <Route path="/sellingProductDetail/:id" element={<SellingProductDetail />} />
+          <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/admin" element={<MenuAdmin />} />
         </Routes>
       </Router>

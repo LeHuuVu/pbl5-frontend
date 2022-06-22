@@ -53,7 +53,8 @@ function LoginForm() {
     //retrieve data 
     // JSON.parse(localStorage.getItem('user-info'))
     if(res.data.role===0){window.location.href= "/admin";}
-    else if(res.data.role===2){window.location.href= "/productList";}
+    else if(res.data.role===2){window.location.href= "/sellingProduct";}
+    else if(res.data.role!==2){window.location.href= "/productList";}
     // if(cookies.userInfo.role!==2){navigate("/productList");}
   }
   const onRemember = (e) => {

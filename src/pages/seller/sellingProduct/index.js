@@ -7,7 +7,7 @@ import 'antd/dist/antd.min.css';
 function ProductList() {
   if (localStorage['user-info'] == null) { window.location.href = '/login' }
   
-  if(JSON.parse(localStorage['user-info']).role!=2) {window.location.href = '/productList'}
+  if(JSON.parse(localStorage['user-info']).role!==2) {window.location.href = '/productList'}
 
     return (
         <div>
