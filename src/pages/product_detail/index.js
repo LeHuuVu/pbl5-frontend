@@ -1,19 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input,List } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input } from 'antd';
 import './index.css'
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import {
-    DislikeFilled,
-    DislikeOutlined,
-    LikeFilled,
-    LikeOutlined,
-} from '@ant-design/icons';
-import { productDetail2 } from '../../api/buyerInterface';
+import { productDetail2, sendReview } from '../../api/buyerInterface';
 import moment from 'moment';
 import { addProdToCart } from '../../api/cart';
 import { useNavigate } from "react-router-dom";
@@ -59,59 +53,77 @@ function Product_Detail() {
     // if (localStorage['user-info'] == null) { window.location.href = '/login' }  
     // const [cookies] = useCookies(["userInfo"]); 
     const { id } = useParams();
-    const [likes, setLikes] = useState(0);
-    const [dislikes, setDislikes] = useState(0);
-    const [action, setAction] = useState(null);
     const [product, setProduct] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
     const [approve, setApprove] = useState(false);
 
-    // const [comments, setComments] = useState([]);
-    // const [submitting, setSubmitting] = useState(false);
-    const [value, setValue] = useState('');
+    const [comment, setComment] = useState([]);
+    const [reload, setReload] = useState(false);
+    const [star, setStar] = useState(0);
 
     const handleSubmit = () => {
-        if (!value) return;
-        // setSubmitting(true);
-        setTimeout(() => {
-            // setSubmitting(false);
-            setValue('');
-            //   setComments([
-            //     ...comments,
-            //     {
-            //       author: 'Han Solo',
-            //       avatar: 'https://joeschmoe.io/api/v1/random',
-            //       content: <p>{value}</p>,
-            //       datetime: moment().fromNow(),
-            //     },
-            //   ]);
-        }, 1000);
+        if (!comment||!star) {
+            notification.error({
+                message: 'Hãy điền đầy đủ các mục',
+                duration: 1.5,})
+            return;
+        }
+        let userID = null;
+        if(localStorage.getItem('remember') ==='local'){
+            userID = JSON.parse(localStorage.getItem('user-info')).id;
+          }else if(localStorage.getItem('remember') ==='session'){
+            if((sessionStorage.getItem('user-info')) !== null){
+                userID = JSON.parse(sessionStorage.getItem('user-info')).id;
+            }
+        }
+        sendReview({
+            id_product: id,
+            id_user: userID,
+            star_rating: star,
+            comment: comment,
+        }).then(()=>{
+                notification.success({
+                message: 'Cảm ơn ý kiến của quý khách',
+                duration: 1.5,
+                })
+                setStar(0);
+                setComment('');
+            }
+        ).catch((error) => {
+            notification.error({
+                message: 'Đã xảy ra lỗi, hãy thử lại sau',
+                duration: 1.5,})
+            console.log(error.response.request.response)
+        })
+        setReload(true);
     };
 
-    const handleChange = (e) => {
-        setValue(e.target.value);
-    };
+    // const handleChange = (e) => {
+    //     setComment(e.target.value);
+    //     setStar(e.target);
+    // };
     const navigate = useNavigate();
 
     try {
         useEffect(() => {
             try {
+                setReload(false);
                 let userID = null;
                 if(localStorage.getItem('remember') ==='local'){
                     userID = JSON.parse(localStorage.getItem('user-info')).id;
                   }else if(localStorage.getItem('remember') ==='session'){
                     if((sessionStorage.getItem('user-info')) !== null){
-                      userInfo = JSON.parse(sessionStorage.getItem('user-info')).id;
+                        userID = JSON.parse(sessionStorage.getItem('user-info')).id;
                     }
                 }
                 productDetail2({ 
                     id_product: id,
                     id_user: userID}).then((res) => {
-                    setProduct((product) => res.data);
+                    setProduct(res.data);
                     checkReview(res.data);
                 }).catch((error) => console.log(error.response.request.response))
             } catch (e) { console.error(e) }
-        }, [])
+        }, [reload])
     }
     catch (e) { console.error(e) }
     useEffect(() => {
@@ -135,7 +147,8 @@ function Product_Detail() {
     const OnClick = async () => {
         if (userInfo != null) {
             await addProdToCart({ id_user: userInfo.id, id_product: id }).then((res) => {
-                openNotificationSuccess(res)
+                openNotificationSuccess(res);
+                navigate("/productList");
             }).catch((error) => {
                 if (error.request.status === 400) {
                     notification.error({
@@ -154,66 +167,71 @@ function Product_Detail() {
         }
     }
 
+    const OnBuyClick = async () => {
+        if (userInfo != null) {
+            await addProdToCart({ id_user: userInfo.id, id_product: id }).then((res) => {
+                openNotificationSuccess(res);
+            }).catch((error) => {
+                console.log(error)
+            })
+            navigate("/cart");
+        }
+        else {
+            notification.info({
+                message: "Hãy đăng nhập để có thể mua mặt hàng này",
+                duration: 3,
+            })
+            navigate("/login");
+        }
+    }
+
     const openNotificationSuccess = (res) => {
         notification.success({
             message: "Đã thêm " + product.product.name + " vào Giỏ!",
             duration: 3,
         })
-        navigate("/productList");
     }
-
-    const like = () => {
-        setLikes(1);
-        setDislikes(0);
-        setAction('liked');
-    };
-
-
-    const dislike = () => {
-        setLikes(0);
-        setDislikes(1);
-        setAction('disliked');
-    };
-
-    const actions = [
-        <Tooltip key="comment-basic-like" title="Like">
-            <span onClick={like}>
-                {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-                <span className="comment-action">{likes}</span>
-            </span>
-        </Tooltip>,
-        <Tooltip key="comment-basic-dislike" title="Dislike">
-            <span onClick={dislike}>
-                {React.createElement(
-                    action === 'disliked' ? DislikeFilled : DislikeOutlined
-                )}
-                <span className="comment-action">{dislikes}</span>
-            </span>
-        </Tooltip>,
-        <span key="comment-basic-reply-to">Reply to</span>,
-    ];
 
     const checkReview = (data) => {
         console.log(data.review)
-        if(data!=null && data.review!== undefined) {
-            if(data.review==='approved'){setApprove(true);}
-            else if(data.review==='denied') (setApprove(false))
+        if(userInfo!==null){
+            if(data!=null && data.review!== undefined) {
+                if(data.review==='approved'){setApprove(true);}
+                else if(data.review==='denied') (setApprove(false))
+            }
         }
     };
     
     let comments;
     let review;
+    let userReview;
     if (product !== null) {
+        if(approve){
+            userReview = (
+            <div>
+                <Rate defaultValue={star} style={{marginLeft:'46px'}} onChange={(e)=>{setStar(e)}}/>
+                            <Comment
+                                // avatar={<Avatar src={userInfo.avatar} alt={userInfo.name} />}
+                                content={
+                                    <Editor
+                                        onChange={(e)=>{setComment(e.target.value);}}
+                                        onSubmit={handleSubmit}
+                                        // submitting={submitting}
+                                        value={comment}
+                                    />
+                                }
+                            />
+            </div>
+        )}
         if (product.list_review !== undefined) {
             try {
                 comments = (
                     product.list_review.map((item) =>
                         <Comment
-                            actions={actions}
                             author={
                                 <>
                                     <b><a style={{ marginRight: '10px' }}>{item.user_name}</a></b>
-                                    <Rate disabled value={item.review.star_rating} />
+                                    <Rate disabled value={item.review.star_rating} readOnly/>
                                 </>
                             }
                             avatar={
@@ -233,7 +251,7 @@ function Product_Detail() {
                     </Comment>)
                 )
                 
-                if(approve){review = (
+                review = (
                     <div style={{ margin: 'auto 20%', padding: '10px 20px' }}>
                         <h2>Đánh giá</h2>
                         {product.list_review.length > 0 ?
@@ -245,20 +263,9 @@ function Product_Detail() {
                                 </div>
                             </div>
                         }
-                        <Rate allowHalf defaultValue={0} style={{marginLeft:'46px'}}/>
-                        <Comment
-                            // avatar={<Avatar src={userInfo.avatar} alt={userInfo.name} />}
-                            content={
-                                <Editor
-                                    onChange={handleChange}
-                                    onSubmit={handleSubmit}
-                                    // submitting={submitting}
-                                    value={value}
-                                />
-                            }
-                        />
+                        {userReview}
                     </div>
-                )}
+                )
             }
             catch (e) { console.error(e) }
         }
@@ -310,7 +317,7 @@ function Product_Detail() {
                             </div>
                             <Form.Item>
                                 <Button style={{ marginRight: '10px', marginBottom: '20px' }} onClick={(e) => OnClick()}>Thêm vào Giỏ hàng</Button>
-                                <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }}>Mua</Button>
+                                <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }} onClick={(e) => OnBuyClick()}>Mua</Button>
                             </Form.Item>
                         </div>
                     </div>
