@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input } from 'antd';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input, message, Upload } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
 import './index.css'
 import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +17,7 @@ import {
 } from '@ant-design/icons';
 import { sellingproductDetail } from '../../../api/sellerInterface';
 import { updateProduct } from '../../../api/sellerInterface';
+import axios from '../../../api/axios';
 import moment from 'moment';
 import { delSellingProd } from '../../../api/sellerInterface';
 import { useNavigate } from "react-router-dom";
@@ -32,28 +35,49 @@ function averageRate(list_review) {
     return 0;
 }
 function Product_Detai() {
+    if(localStorage.getItem('remember') ==='local'){
+        if (localStorage['user-info'] == null) { window.location.href = '/login' }
+      }else if(localStorage.getItem('remember') ==='session'){
+        if (sessionStorage['user-info'] == null) { window.location.href = '/login' }
+    } else { window.location.href = '/login' }
     if (localStorage['user-info'] == null) { window.location.href = '/login' }
-
+    const dummyRequest = ({ file, onSuccess }) => {
+        setTimeout(() => {
+          onSuccess("ok");
+        }, 0);
+      };
     const { id } = useParams();
+    const [name, setName] = useState('');
+    const [img, setImg] = useState();
+    const [description, setDes] = useState('');
+    const [price, setPrice] = useState(0);
+    const [amount_remaining, setAmount] = useState(0);
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
     const [product, setProduct] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
-    const [editable, setEditable] = useState(false)
+    const [editable, setEditable] = useState(false);
+    const [reload, setReload] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const { TextArea } = Input;
 
     const navigate = useNavigate();
 
     try {
-        useEffect(async () => {
+        useEffect(() => {
             try {
-                await sellingproductDetail({ id_product: id }).then((res) => {
+                setReload(false);
+                sellingproductDetail({ id_product: id }).then((res) => {
+                    setName(res.data.product.name);
+                    setDes(res.data.product.description);
+                    setPrice(res.data.product.price);
+                    setAmount(res.data.product.amount_remaining);
                     setProduct((product) => res.data);
                 }).catch((error) => console.log(error.response.request.response))
             } catch (e) { console.error(e) }
-        }, [])
+        }, [reload])
     }
     catch (e) { console.error(e) }
     useEffect(() => {
@@ -83,10 +107,91 @@ function Product_Detai() {
     const onCancel = () => {
         setEditable(false)
     }
-    const save = () => {
+
+    //update product info
+    const save = async () => {
+        let userID = null;
+        if(localStorage.getItem('remember') ==='local'){
+            userID = JSON.parse(localStorage.getItem('user-info')).id;
+          }else if(localStorage.getItem('remember') ==='session'){
+            if((sessionStorage.getItem('user-info')) !== null){
+                userID = JSON.parse(sessionStorage.getItem('user-info')).id;
+            }
+        }
+        const formData = new FormData()
+        formData.append('id_user', userID)
+        formData.append('id_product', id)
+        formData.append('name', name)
+        formData.append('description', description)
+        formData.append('price', price)
+        if(img !== undefined){
+            formData.append('image', img.originFileObj)
+        }
+        // formData.append('avatar', img.originFileObj)
+        formData.append('amount_remaining', amount_remaining)
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        // }
+        await axios.post('/v1/editProduct',formData).then(res => openUpdateNotificationSuccess(res))
+            .catch((error) => {
+                console.log(error)
+                notification.error({
+                    message: 'Đã xảy ra lỗi, vui lòng thử lại sau ít phút',
+                    duration: 3,
+                })
+            })
+        setReload(true)
         setEditable(false)
     }
 
+    //image handle
+
+    const onChangeImg = (response) => {
+        try{
+            if (response.file.status !== 'uploading') {
+                setLoading(true)
+            }
+            if (response.file.status === 'done') {
+                setImg(response.file);
+            } else if (response.file.status === 'error') {
+                message.error(`${response.file.name} 
+                                file upload failed.`);
+            }
+            setLoading(false)
+        }catch(e){console.log(e)}
+    };
+    
+    const removeImg = () => {
+        try{
+            setImg(undefined);
+        }catch(e){console.log(e)}
+    };
+    const beforeUpload = (file) => {
+        const isJpgOrPng = (file.type === 'image/jpeg' || file.type === 'image/png'|| file.type === 'image/jpg'|| file.type === 'image/svg'|| file.type === 'image/gif');
+      
+        if (!isJpgOrPng) {
+          message.error('Bạn chỉ có thể tải lên file có định dạng JPG/PNG/JPG/SVG!');
+        }
+      
+        const isLt2M = (file.size / 1024 / 1024 < 2);
+      
+        if (!isLt2M) {
+          message.error('Ảnh có dung lượng quá lớn!');
+        }
+        return isJpgOrPng && isLt2M;
+      };
+    const uploadButton = (
+        <div>
+          {loading ? <LoadingOutlined /> : <PlusOutlined />}
+          <div
+            style={{
+              marginTop: 8,
+            }}
+          >
+            Thay đổi ảnh minh họa
+          </div>
+        </div>
+    );
 
     const OnDelete = async () => {
         await delSellingProd({ id_product: id }).then((res) => {
@@ -98,6 +203,13 @@ function Product_Detai() {
                     duration: 3,
                 })
             }
+        })
+    }
+    //update pronounce
+    const openUpdateNotificationSuccess = (res) => {
+        notification.success({
+            message: "Đã cập nhật " + product.product.name,
+            duration: 3,
         })
     }
 
@@ -190,15 +302,32 @@ function Product_Detai() {
                 content = (
                     <div>
                         <div style={{ width: '40%', float: 'left', textAlign: 'right' }}>
+                        
+                        {editable ?             
+                            <ImgCrop rotate>
+                                <Upload
+                                    customRequest={dummyRequest}
+                                    listType="picture-card"
+                                    onChange={(response)=>onChangeImg(response)}
+                                    accept=".png,.jpeg,.jpg,.gif,.svg"
+                                    beforeUpload={beforeUpload}
+                                    maxCount={1}
+                                    onRemove={removeImg}
+                                >
+                                    {uploadButton}
+                                </Upload>
+                            </ImgCrop>  
+                            :
                             <Image
                                 width={'45%'}
                                 src={product.product.image}
-                            />
+                            /> 
+                        }
                         </div>
                         <div style={{ width: '57%', float: 'left', marginLeft: '20px' }}>
                             <div style={{ width: '75%' }}>
                                 {editable ?
-                                    <Input readOnly={!editable} defaultValue={product.product.name} size='large' />
+                                    <Input readOnly={!editable} defaultValue={product.product.name} size='large' onChange = {(e)=> setName(e.target.value)}/>
                                     :
                                     <h2>{product.product.name}</h2>
                                 }
@@ -212,16 +341,12 @@ function Product_Detai() {
                                     </tr>
                                     <tr>
                                         <th>Shop:</th>
-                                        {editable ?
-                                            <td><Input readOnly={!editable} defaultValue={product.company_name} /></td>
-                                            :
                                             <td>{product.company_name}</td>
-                                        }
                                     </tr>
                                     <tr>
                                         <th>Mô tả:</th>
                                         {editable ?
-                                            <td><TextArea rows={7} readOnly={!editable} defaultValue={product.product.description} size='large'/></td>
+                                            <td><TextArea rows={7} readOnly={!editable} defaultValue={product.product.description} size='large' onChange={(e)=> setDes(e.target.value)}/></td>
                                             :
                                             <td>{product.product.description}</td>
                                         }
@@ -229,15 +354,22 @@ function Product_Detai() {
                                     <tr>
                                         <th>Giá:</th>
                                         {editable ?
-                                            <td><Input readOnly={!editable} defaultValue={product.product.price} /></td>
+                                            <td><InputNumber readOnly={!editable} defaultValue={product.product.price} step = {1000} min={1000} onChange={(e)=> setPrice(e)}/></td>
                                             :
                                             <td>{product.product.price}</td>
                                         }
                                     </tr>
                                     <tr>
                                         <th>Số lượng<br /> hiện có:</th>
-                                        <td>
-                                            <InputNumber defaultValue={product.product.amount_remaining} style={{ marginRight: '10px' }} /> sản phẩm
+                                        <td>                                        
+                                        {editable ?
+                                            <div>
+                                                <InputNumber defaultValue={product.product.amount_remaining} style={{ marginRight: '10px' }} min={1} onChange={(e)=> setAmount(e)}/>
+                                            </div>
+                                            :
+                                            <td>{product.product.amount_remaining} sản phẩm</td>
+                                        }
+                                            
                                         </td>
                                     </tr>
                                 </table>
@@ -245,8 +377,8 @@ function Product_Detai() {
                             <Form.Item>
                                 {editable ?
                                     <div>
-                                        <Button ghost={true} style={{ marginRight: '10px', marginBottom: '20px', backgroundColor: "#ff8e3c", width: "30%", color: "#0d0d0d" }} onClick={save}>Save</Button>
-                                        <Button danger style={{ width: "30%" }} onClick={onCancel} >Cancel</Button>
+                                        <Button ghost={true} style={{ marginRight: '10px', marginBottom: '20px', backgroundColor: "#ff8e3c", width: "30%", color: "#0d0d0d" }} onClick={save}>Lưu thay đổi</Button>
+                                        <Button danger style={{ width: "30%" }} onClick={onCancel} >Hủy bỏ</Button>
                                     </div>
                                     : <><Button type="primary" style={{ marginRight: '10px', marginBottom: '20px', background: "#ff8e3c", borderColor: "#ff8e3c" }} onClick={(e) => onClick()}>Cập nhật</Button>
                                         <Button type="primary" style={{ background: "#ff8e3c", borderColor: "#ff8e3c" }} onClick={(e) => OnDelete()}>Xóa sản phẩm</Button></>

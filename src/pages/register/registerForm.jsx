@@ -68,7 +68,7 @@ const RegisterForm = () => {
                     console.log(error)
                     if (error.request.status === 400) {
                         notification.error({
-                            message: 'Email hpặc số điện thoại này đã được đăng ký!',
+                            message: 'Email hoặc số điện thoại này đã được đăng ký!',
                             duration: 3,
                         })
                     }
