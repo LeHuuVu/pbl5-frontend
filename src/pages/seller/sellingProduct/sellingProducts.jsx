@@ -10,7 +10,14 @@ import { listSellingProduct } from '../../../api/sellerInterface';
 const SellingProductListForm = () => {
     const [list, setList] = useState([]);
 
-    const id = JSON.parse(localStorage['user-info']).id
+    let id
+    if(localStorage.getItem('remember') ==='local'){
+        id = JSON.parse(localStorage.getItem('user-info')).id;
+      }else if(localStorage.getItem('remember') ==='session'){
+        if((sessionStorage.getItem('user-info')) !== null){
+            id = JSON.parse(sessionStorage.getItem('user-info')).id;
+        }
+    }
     useEffect(async () => {
         await listSellingProduct({ id_user: id }).then((res) => {
             setList((list) => res.data);
@@ -33,7 +40,7 @@ const SellingProductListForm = () => {
                 </div>
                 <div style={{ float: 'left' }}>
                     <Button type="primary" style={{ marginLeft: '20px', background: "#ff8e3c", borderColor: "#ff8e3c" }}>
-                        <a href='/login' style={{ textDecoration: 'none' }}>Thêm sản phẩm mới</a>
+                        <a href='/addProduct' style={{ textDecoration: 'none' }}>Thêm sản phẩm mới</a>
                     </Button>
                 </div>
             </div>
