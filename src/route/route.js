@@ -9,6 +9,8 @@ import MenuAdmin from '../pages/admin/menu';
 import Profile from '../pages/profile';
 import Cart from '../pages/cart';
 import ProductDetail from '../pages/product_detail';
+import UserList from '../pages/admin/userList';
+import AdminProductList from '../pages/admin/admin_productList';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
@@ -28,6 +30,8 @@ const App = () => {
           <Route path="/sellingProductDetail/:id" element={<SellingProductDetail />} />
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/admin" element={<MenuAdmin />} />
+          <Route path="/userList" element={<UserList />} />
+          <Route path="/admin_productList" element={<AdminProductList />} />
         </Routes>
       </Router>
   )
