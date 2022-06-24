@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
-import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input, message, Upload } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Image, Button, Form, InputNumber, Avatar, Comment, Tooltip, Rate, notification, Input, message, Upload, Modal } from 'antd';
+import { LoadingOutlined, PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import './index.css'
 import { useParams } from 'react-router';
@@ -16,11 +16,12 @@ import {
     LikeOutlined,
 } from '@ant-design/icons';
 import { sellingproductDetail } from '../../../api/sellerInterface';
-import { updateProduct } from '../../../api/sellerInterface';
 import axios from '../../../api/axios';
 import moment from 'moment';
 import { delSellingProd } from '../../../api/sellerInterface';
 import { useNavigate } from "react-router-dom";
+
+const { confirm } = Modal
 
 function averageRate(list_review) {
     if (list_review !== undefined) {
@@ -86,18 +87,18 @@ function Product_Detai() {
         } catch (e) { console.error(e) }
     }, [product])
 
-    const OnUpdate = async () => {
-        await updateProduct({ id_product: id, name: '', shop: '', amount: 0, description: '' }).then((res) => {
-            // openNotificationSuccess(res)
-        }).catch((error) => {
-            if (error.request.status === 400) {
-                notification.error({
-                    message: 'Lỗi',
-                    duration: 3,
-                })
-            }
-        })
-    }
+    // const OnUpdate = async () => {
+    //     await updateProduct({ id_product: id, name: '', shop: '', amount: 0, description: '' }).then((res) => {
+    //         // openNotificationSuccess(res)
+    //     }).catch((error) => {
+    //         if (error.request.status === 400) {
+    //             notification.error({
+    //                 message: 'Lỗi',
+    //                 duration: 3,
+    //             })
+    //         }
+    //     })
+    // }
 
 
     const onClick = () => {
@@ -192,17 +193,44 @@ function Product_Detai() {
           </div>
         </div>
     );
-
-    const OnDelete = async () => {
-        await delSellingProd({ id_product: id }).then((res) => {
+    const OnDelete = () => {
+        let userID = null;
+        if(localStorage.getItem('remember') ==='local'){
+            userID = JSON.parse(localStorage.getItem('user-info')).id;
+          }else if(localStorage.getItem('remember') ==='session'){
+            if((sessionStorage.getItem('user-info')) !== null){
+                userID = JSON.parse(sessionStorage.getItem('user-info')).id;
+            }
+        }
+        confirm({
+          title: 'Xóa sản phẩm',
+          icon: <ExclamationCircleOutlined />,
+          content: 'Bạn có chắc chắn muốn xóa sản phẩm này ?',
+          okText: 'Chắc chắn',
+          okType: 'danger',
+          cancelText: 'Hủy bỏ',
+          centered: true,
+          onOk() {
+            delSellingProd({ 
+                id_product: id, 
+                id_user: userID
+            }).then((res) => {
             openNotificationSuccess(res)
-        }).catch((error) => {
+            }).catch((error) => {
             if (error.request.status === 400) {
                 notification.error({
-                    message: 'Lỗi',
+                    message: 'Đã xảy ra lỗi, vui lòng thử lại sau',
                     duration: 3,
                 })
             }
+            })
+          },
+          onCancel() {
+            notification.error({
+                message: 'Đã hủy bỏ quá trình',
+                duration: 2,
+            })
+          },
         })
     }
     //update pronounce
