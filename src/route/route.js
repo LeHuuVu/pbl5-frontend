@@ -11,6 +11,7 @@ import Cart from '../pages/cart';
 import ProductDetail from '../pages/product_detail';
 import UserList from '../pages/admin/userList';
 import AdminProductList from '../pages/admin/admin_productList';
+import SearchProduct from '../pages/search';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/admin" element={<MenuAdmin />} />
           <Route path="/userList" element={<UserList />} />
           <Route path="/admin_productList" element={<AdminProductList />} />
+          <Route path="/search" element={<SearchProduct />} />
         </Routes>
       </Router>
   )

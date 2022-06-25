@@ -92,7 +92,7 @@ const UserList = () => {
     ];
 
     const data = [];
-    console.log(listUser)
+    // console.log(listUser)
 
     if (listUser.length > 0) {
         listUser.forEach((element, index) => {
