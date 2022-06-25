@@ -2,7 +2,7 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
 import './style.scss';
 // import { useCookies} from "react-cookie"
 import logo from '../../logo_app.png';
@@ -85,14 +85,20 @@ export default function Navbar() {
     <div className="navbar">
       <div >
         <div>
+          {role === 0 ?
+            <a href="/admin">
+              <MenuOutlined style={{ fontSize: '30px', marginRight:"15px"}} />
+            </a>
+            : null
+          }
           <a href={role !== 2 ? "/productList" : "/sellingProduct"}>
-            <img src={logo} alt="logo" className="logo_nav"/>
+            <img src={logo} alt="logo" className="logo_nav" />
           </a>
         </div>
       </div>
       <div className="searchNavbar">
         <div>
-            <Search style={{width:500}} placeholder="Bạn cần gì?" onSearch={onSearch} enterButton />
+          <Search style={{ width: 500 }} placeholder="Bạn cần gì?" onSearch={onSearch} enterButton />
         </div>
       </div>
       <div className="cartNavbar">
@@ -100,7 +106,7 @@ export default function Navbar() {
           {(role === 1)
             ?
             <>
-              <div style={{marginRight:'25px'}}>
+              <div style={{ marginRight: '25px' }}>
                 <Button type="text" href={"/cart"} icon={<ShoppingCartOutlined style={{ fontSize: '200%' }} />} />
               </div>
             </>
