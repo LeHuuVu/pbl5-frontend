@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 // import { useParams } from 'react-router';
 import React, { useState, useEffect } from 'react';
