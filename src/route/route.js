@@ -9,6 +9,7 @@ import MenuAdmin from '../pages/admin/menu';
 import Profile from '../pages/profile';
 import Cart from '../pages/cart';
 import History from '../pages/history';
+import Detail from '../pages/history/detail';
 import ProductDetail from '../pages/product_detail';
 import UserList from '../pages/admin/userList';
 import AdminProductList from '../pages/admin/admin_productList';
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/admin" element={<MenuAdmin />} />
           <Route path="/history" element={<History />} />
+          <Route path="/detail/:id" element={<Detail />} />
           <Route path="/userList" element={<UserList />} />
           <Route path="/admin_productList" element={<AdminProductList />} />
         </Routes>

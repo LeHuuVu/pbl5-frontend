@@ -13,3 +13,7 @@ export const getReview = async (argument) => instance.post('/v1/getReviewProduct
 export const payment = async (argument) => instance.post('/v2/order',argument)
 //review
 export const sendReview = async (argument) => instance.post('/v1/review',argument)
+//order history
+export const orderHistory = async (argument) => instance.post('/v1/getHistoryOrder',argument)
+//detail order history
+export const detailOrder = async (argument) => instance.post('/v1/getDetailOrder',argument)
