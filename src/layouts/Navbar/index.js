@@ -64,13 +64,27 @@ export default function Navbar() {
       console.log(error)
     }
   }
+  const handleHistory = () => {
+    window.location.href = '/history'
+  }
+  const handleProfile = () => {
+    window.location.href = '/profile'
+  }
   const userInformation = (
     <Menu className=" menuNavbar">
       <Menu.Item key="0">
-        <a href="/profile">
+        <a onClick={handleProfile}>
           <a>Profile</a>
         </a>
       </Menu.Item>
+      {role === 1 ?
+      <Menu.Item key="0">
+        <a onClick={handleHistory}>
+          <a>Lịch sử đặt hàng</a>
+        </a>
+      </Menu.Item>
+      : null
+      }
       <Menu.Item key="1">
         <a onClick={handleLogout}>Logout</a>
       </Menu.Item>
