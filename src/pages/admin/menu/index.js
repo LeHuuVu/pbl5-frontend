@@ -7,11 +7,11 @@ import { Button } from 'antd';
 function MenuAdmin() {
 
     const ViewUser = () => {
-        //
+        window.location.href= "/userList";
     }
 
     const ViewProduct = () => {
-        //
+        window.location.href= "/admin_productList";
     }
 
     return (

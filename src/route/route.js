@@ -10,6 +10,8 @@ import Profile from '../pages/profile';
 import Cart from '../pages/cart';
 import History from '../pages/history';
 import ProductDetail from '../pages/product_detail';
+import UserList from '../pages/admin/userList';
+import AdminProductList from '../pages/admin/admin_productList';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
@@ -29,7 +31,12 @@ const App = () => {
           <Route path="/sellingProductDetail/:id" element={<SellingProductDetail />} />
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/admin" element={<MenuAdmin />} />
+<<<<<<< HEAD
           <Route path="/history" element={<History />} />
+=======
+          <Route path="/userList" element={<UserList />} />
+          <Route path="/admin_productList" element={<AdminProductList />} />
+>>>>>>> eb1dc384f4c02380515c6391514fa64cf25b2f5b
         </Routes>
       </Router>
   )
