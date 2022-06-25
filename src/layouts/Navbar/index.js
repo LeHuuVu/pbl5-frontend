@@ -1,45 +1,64 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'tailwindcss/tailwind.css';
 import { Menu, Dropdown, Avatar, Input, Space, Button } from 'antd';
 import { ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
 import './style.scss';
 // import { useCookies} from "react-cookie"
 import logo from '../../logo_app.png';
+import { listProduct_search } from '../../api/search';
 
 export default function Navbar() {
-  // const [cookies, removeCookie] = useCookies(["userInfo"]); 
-  // let info = JSON.parse(localStorage.getItem('user-info'));
+
+  const [data_search, setData_search] = useState([]);
+  // const [reload, setReload] = useState(false);
+
+  const onSearch = async (value) => {
+    if (localStorage.getItem('data-search') !== null) {
+      localStorage.setItem('data-search', null)
+    }
+    if (value !== "") {
+      try {
+        // setReload(false)
+        await listProduct_search({
+          key: value
+        }).then((res) => {
+          if (res.data.length > 0) { setData_search(res.data); }
+        }).catch((error) => console.log(error))
+      } catch (e) { console.error(e) }
+      localStorage.setItem("data-search", JSON.stringify(data_search))
+    }
+    else {
+      setData_search(null)
+
+      // localStorage.setItem("data-search", JSON.stringify());
+    }
+    if (data_search.length > 0) {
+      window.location.href = "/search"
+    }
+  }
+
   let info;
   if (localStorage.getItem('remember') === 'local') {
     info = JSON.parse(localStorage.getItem('user-info'));
   } else if (localStorage.getItem('remember') === 'session') {
     info = JSON.parse(sessionStorage.getItem('user-info'));
   }
+
   const { Search } = Input;
-  const onSearch = (value) => console.log(value);
-  // let user = localStorage.getItem('user-info');
+
   let role;
   if (info !== undefined) {
     if (info !== null) {
       role = info.role
     }
   }
-  // if (typeof localStorage['user-info'] != "undefined") {
-  //   if (JSON.parse(localStorage['user-info']).role === 2) {
-  //     role = 2
-  //   }
-  //   if (JSON.parse(localStorage['user-info']).role === 0) {
-  //     role = 0
-  //   }
-  // }
 
   const handleLogout = async () => {
     try {
       localStorage.clear();
       sessionStorage.clear();
       role = 3;
-      // removeCookie('userInfo');
       window.location.href = '/login';
     } catch (error) {
       console.log(error)
@@ -101,7 +120,7 @@ export default function Navbar() {
         <div>
           {role === 0 ?
             <a href="/admin">
-              <MenuOutlined style={{ fontSize: '30px', marginRight:"15px"}} />
+              <MenuOutlined style={{ fontSize: '30px', marginRight: "15px" }} />
             </a>
             : null
           }
@@ -130,6 +149,13 @@ export default function Navbar() {
           {checkLogin}
         </Space>
       </div>
+      {/* <main>
+        {data_search ?
+          <SearchProduct item={data_search}></SearchProduct>
+          :
+          null
+        }
+      </main> */}
     </div>
   )
 }
